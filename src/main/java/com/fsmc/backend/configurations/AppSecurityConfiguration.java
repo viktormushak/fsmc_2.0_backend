@@ -1,5 +1,7 @@
 package com.fsmc.backend.configurations;
 
+import com.fsmc.backend.service.auth.UserDetailsServiceImpl;
+import com.fsmc.backend.service.users.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,6 +10,8 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.sql.DataSource;
@@ -16,19 +20,27 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final DataSource dataSource;
-    private final PasswordEncoder passwordEncoder;
+    private final UsersService usersService;
 
     @Autowired
-    public AppSecurityConfiguration(DataSource dataSource, PasswordEncoder passwordEncoder) {
-        this.dataSource = dataSource;
-        this.passwordEncoder = passwordEncoder;
+    public AppSecurityConfiguration(UsersService usersService) {
+        this.usersService = usersService;
     }
 
 
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsServiceImpl(usersService);
     }
 
     @Override
@@ -40,10 +52,6 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder)
-                .usersByUsernameQuery("select id, username, password, enabled from users where username = ?")
-                .authoritiesByUsernameQuery("select authority from users where user name = ?");
+        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 }

@@ -19,7 +19,7 @@ public class User {
     @Column(name = "authority")
     private String authority;
     @Column(name = "enabled")
-    private int enabled;
+    private boolean enabled;
 
     public int getId() {
         return id;
@@ -53,11 +53,11 @@ public class User {
         this.authority = authority;
     }
 
-    public int getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(int enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 }

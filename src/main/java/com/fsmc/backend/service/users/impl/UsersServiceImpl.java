@@ -18,7 +18,12 @@ public class UsersServiceImpl implements UsersService {
 
     public User createUser(User user) {
         user.setAuthority("ROLE_USER");
-        user.setEnabled(1);
+        user.setEnabled(true);
         return usersRepository.findByUsername(user.getUsername()).isPresent() ? User.EMPTY : usersRepository.save(user);
+    }
+
+    @Override
+    public User loadUserByUsername(String username) {
+        return usersRepository.findByUsername(username).orElse(User.EMPTY);
     }
 }

@@ -1,14 +1,7 @@
-CREATE TABLE users (
-  username VARCHAR(50) NOT NULL,
-  password VARCHAR(100) NOT NULL,
-  enabled TINYINT NOT NULL DEFAULT 1,
-  PRIMARY KEY (username)
+create table users (
+    id int auto_increment primary key,
+    username varchar(50) not null,
+    password varchar(100) not null,
+    authority varchar(10) not null,
+    enabled  boolean not null
 );
-
-CREATE TABLE authorities (
-  username VARCHAR(50) NOT NULL,
-  authority VARCHAR(50) NOT NULL,
-  FOREIGN KEY (username) REFERENCES users (username)
-);
-
-CREATE UNIQUE INDEX ix_auth_username on authorities (username,authority);

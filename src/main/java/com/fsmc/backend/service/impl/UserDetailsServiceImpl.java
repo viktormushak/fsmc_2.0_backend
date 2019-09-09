@@ -1,7 +1,7 @@
-package com.fsmc.backend.service.auth;
+package com.fsmc.backend.service.impl;
 
 import com.fsmc.backend.data.model.User;
-import com.fsmc.backend.service.users.UsersService;
+import com.fsmc.backend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

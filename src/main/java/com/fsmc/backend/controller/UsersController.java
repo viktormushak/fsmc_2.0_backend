@@ -2,7 +2,7 @@ package com.fsmc.backend.controller;
 
 import com.fsmc.backend.data.model.User;
 import com.fsmc.backend.data.network.Result;
-import com.fsmc.backend.service.users.UsersService;
+import com.fsmc.backend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

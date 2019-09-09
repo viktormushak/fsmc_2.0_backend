@@ -1,7 +1,7 @@
 package com.fsmc.backend.configurations;
 
-import com.fsmc.backend.service.auth.UserDetailsServiceImpl;
-import com.fsmc.backend.service.users.UsersService;
+import com.fsmc.backend.service.impl.UserDetailsServiceImpl;
+import com.fsmc.backend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

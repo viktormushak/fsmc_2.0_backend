@@ -1,4 +1,4 @@
-package com.fsmc.backend.service.users;
+package com.fsmc.backend.service;
 
 import com.fsmc.backend.data.model.User;
 

@@ -1,8 +1,8 @@
-package com.fsmc.backend.service.users.impl;
+package com.fsmc.backend.service.impl;
 
 import com.fsmc.backend.data.model.User;
 import com.fsmc.backend.data.repo.UsersRepository;
-import com.fsmc.backend.service.users.UsersService;
+import com.fsmc.backend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

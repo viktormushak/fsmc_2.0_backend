@@ -22,17 +22,17 @@ public class ProfilesController {
     }
 
     @GetMapping("/me")
-    public Result getMe(OAuth2Authentication authentication){
+    public Profile getMe(OAuth2Authentication authentication){
         return getProfileByUsername((String) authentication.getPrincipal());
     }
 
     @GetMapping("/{username}")
-    public Result getByUsername(@PathVariable("username") String username){
+    public Profile getByUsername(@PathVariable("username") String username){
         return getProfileByUsername(username);
     }
 
-    private Result getProfileByUsername(String username) {
+    private Profile getProfileByUsername(String username) {
         Profile profile = profilesService.getByUsername(username);
-        return Profile.EMPTY.equals(profile) ? new Result.Error("Profile not found") : new Result.Success<>(profile);
+        return Profile.EMPTY.equals(profile) ? Profile.EMPTY: profile;
     }
 }

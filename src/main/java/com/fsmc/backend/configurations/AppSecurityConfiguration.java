@@ -50,6 +50,7 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        System.out.println(passwordEncoder().encode("123456"));
         auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
     }
 }

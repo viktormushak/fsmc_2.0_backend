@@ -9,14 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Profile {
+public class Company {
 
-    public static final Profile EMPTY = new Profile();
     private int id;
     private String name;
-    private String surname;
-    private String email;
-    private String phone;
-    private Address address;
-    private Company company;
 }

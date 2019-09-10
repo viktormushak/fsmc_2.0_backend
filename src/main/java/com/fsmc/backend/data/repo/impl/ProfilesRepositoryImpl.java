@@ -1,5 +1,7 @@
 package com.fsmc.backend.data.repo.impl;
 
+import com.fsmc.backend.data.model.Address;
+import com.fsmc.backend.data.model.Company;
 import com.fsmc.backend.data.model.Profile;
 import com.fsmc.backend.data.repo.ProfilesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +20,10 @@ public class ProfilesRepositoryImpl implements ProfilesRepository {
     private final ProfileMapper profileMapper;
 
     private static final String GET_BY_USERNAME_QUERY =
-            "SELECT name, surname, email, phone FROM users LEFT JOIN profiles p on users.id = p.user_id WHERE username = ?";
+            "SELECT profile.id, user_name, user_surname, email, phone, profile.address_id, region, city, street, build, profile.company_id, company_name FROM user " +
+                    "LEFT JOIN (select profile.id, user_id, user_name, user_surname, email, phone, company_id, address_id, region, city, street, build, company_name FROM profile " +
+                    "LEFT JOIN (select address.id, region, city, street, build, company_name from address left join company on address.company_id = company.id) as address on profile.address_id = address.id) as profile" +
+                    " on user.id = profile.id WHERE username = ?";
 
     @Autowired
     public ProfilesRepositoryImpl(JdbcTemplate jdbcTemplate) {
@@ -37,10 +42,22 @@ public class ProfilesRepositoryImpl implements ProfilesRepository {
         @Override
         public Profile mapRow(ResultSet resultSet, int i) throws SQLException {
             return !resultSet.first() ? null : Profile.builder()
-                    .name(resultSet.getString("name"))
-                    .surname(resultSet.getString("surname"))
+                    .id(resultSet.getInt("id"))
+                    .name(resultSet.getString("user_name"))
+                    .surname(resultSet.getString("user_surname"))
                     .email(resultSet.getString("email"))
                     .phone(resultSet.getString("phone"))
+                    .address(Address.builder()
+                            .id(resultSet.getInt("address_id"))
+                            .region(resultSet.getString("region"))
+                            .city(resultSet.getString("city"))
+                            .street(resultSet.getString("street"))
+                            .build(resultSet.getString("build"))
+                            .build())
+                    .company(Company.builder()
+                            .id(resultSet.getInt("company_id"))
+                            .name(resultSet.getString("company_name"))
+                            .build())
                     .build();
         }
     }

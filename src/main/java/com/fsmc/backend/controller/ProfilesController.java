@@ -21,7 +21,7 @@ public class ProfilesController {
         this.profilesService = profilesService;
     }
 
-    @GetMapping("/me")
+    @GetMapping
     public Profile getMe(OAuth2Authentication authentication){
         return getProfileByUsername((String) authentication.getPrincipal());
     }

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Company {
 
-    private int id;
     private String name;
+    private int addresses;
+    private int employees;
 }

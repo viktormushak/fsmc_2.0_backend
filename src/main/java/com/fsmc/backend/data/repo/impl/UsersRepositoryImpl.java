@@ -4,7 +4,6 @@ import com.fsmc.backend.data.model.User;
 import com.fsmc.backend.data.model.UserProfile;
 import com.fsmc.backend.data.repo.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -64,8 +63,7 @@ public class UsersRepositoryImpl implements UsersRepository {
         } catch (Exception e){
             e.printStackTrace();
             return Optional.empty();
-        }
-    }
+        }    }
 
     @Override
     public Optional<UserProfile> getProfileByUuid(String uuid) {

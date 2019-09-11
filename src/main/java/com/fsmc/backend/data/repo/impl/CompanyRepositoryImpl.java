@@ -16,8 +16,8 @@ public class CompanyRepositoryImpl implements CompanyRepository {
 
     private final JdbcTemplate jdbcTemplate;
     private static final String GET_COMPANIES_BY_RESPONSIBLE_USERNAME =
-            "select company_id, company_name from user left join " +
-            "(select company_id, company_name, user_id from company_to_user left join company on company_to_user.company_id = company.id) as company" +
+            "select company.id, company.company_name from user left join " +
+            "(select company.id, company.company_name, company_to_user.user_id from company left join company_to_user on company.id = company_to_user.company_id) as company" +
             " on user.id = company.user_id where username = ?";
 
     @Autowired

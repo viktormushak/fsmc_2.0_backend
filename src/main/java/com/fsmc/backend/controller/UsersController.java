@@ -1,16 +1,14 @@
 package com.fsmc.backend.controller;
 
 import com.fsmc.backend.data.model.User;
-import com.fsmc.backend.data.network.Result;
+import com.fsmc.backend.data.model.UserProfile;
 import com.fsmc.backend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UsersController {
 
     private final UsersService usersService;
@@ -20,9 +18,23 @@ public class UsersController {
         this.usersService = usersService;
     }
 
-    @PostMapping("/add")
-    public Result addUser(@RequestBody User user){
-        User newUser = usersService.createUser(user);
-        return User.EMPTY.equals(newUser) ? new Result.Error("User already exists!") : new Result.Success<>(newUser);
+    @PostMapping("/create")
+    public User createUser(@RequestBody User user){
+        return usersService.create(user);
+    }
+
+    @PostMapping("/profile/update")
+    public UserProfile updateProfile(@RequestBody UserProfile userProfile, OAuth2Authentication authentication){
+        return usersService.updateProfile(userProfile, (String) authentication.getPrincipal());
+    }
+
+    @GetMapping("/profile")
+    public UserProfile getPrincipalProfile(OAuth2Authentication authentication){
+        return usersService.getProfileByUuid((String) authentication.getPrincipal());
+    }
+
+    @GetMapping("/profile/id/{uuid}")
+    public UserProfile getProfileByUuid(@PathVariable("uuid") String uuid){
+        return usersService.getProfileByUuid(uuid);
     }
 }

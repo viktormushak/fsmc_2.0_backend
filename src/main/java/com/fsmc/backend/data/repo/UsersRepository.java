@@ -1,13 +1,15 @@
 package com.fsmc.backend.data.repo;
 
 import com.fsmc.backend.data.model.User;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
+import com.fsmc.backend.data.model.UserProfile;
 
 import java.util.Optional;
 
-@Repository
-public interface UsersRepository extends CrudRepository<User, Integer> {
+public interface UsersRepository {
 
-    Optional<User> findByUsername(String username);
+    Optional<User> save(User user);
+
+    Optional<UserProfile> updateProfile(UserProfile userProfile, String uuid);
+
+    Optional<UserProfile> getProfileByUuid(String uuid);
 }

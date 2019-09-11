@@ -1,7 +1,5 @@
 package com.fsmc.backend.configurations;
 
-import com.fsmc.backend.service.impl.UserDetailsServiceImpl;
-import com.fsmc.backend.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,19 +8,20 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableWebSecurity
 public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final UsersService usersService;
+    private final DataSource dataSource;
 
     @Autowired
-    public AppSecurityConfiguration(UsersService usersService) {
-        this.usersService = usersService;
+    public AppSecurityConfiguration(DataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
 
@@ -36,11 +35,6 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl(usersService);
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
@@ -50,7 +44,9 @@ public class AppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        System.out.println(passwordEncoder().encode("123456"));
-        auth.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder());
+        auth.jdbcAuthentication()
+                .dataSource(dataSource)
+                .usersByUsernameQuery("select uuid, password, enabled from user where uuid = ?")
+                .authoritiesByUsernameQuery("select uuid, authority from user where uuid = ?");
     }
 }

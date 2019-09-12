@@ -6,12 +6,16 @@ import com.fsmc.backend.data.repo.RawDataRepository;
 import com.fsmc.backend.service.FileService;
 import com.fsmc.backend.service.RawDataService;
 import com.fsmc.backend.utils.csv.CsvReader;
+import com.fsmc.backend.utils.csv.CsvRows;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class RawDataServiceImpl implements RawDataService {
@@ -37,33 +41,29 @@ public class RawDataServiceImpl implements RawDataService {
 
         uploadedFile.ifPresent(file -> {
             try {
-
-                CsvReader csvReader = new CsvReader("Address;Person;Sku;Quantity", ";");
-                csvReader.openFile(file);
-//                String string;
-//                RawData rawData = null;
-//                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-//                while ((string = bufferedReader.readLine()) != null) {
-//                    String[] strings = string.split(";");
-//                    try {
-//                        rawData = RawData.builder()
-//                                .companyName(company)
-//                                .aUuid(Objects.hash(company, strings[1]))
-//                                .rAddress(strings[1])
-//                                .eUuid(Objects.hash(company, strings[3]))
-//                                .rEmployee(strings[3])
-//                                .sUuid(Objects.hash(strings[3], strings[2]))
-//                                .rSale(strings[2])
-//                                .quantity(Double.parseDouble(strings[4]))
-//                                .build();
-//                    }catch (Exception e){
-//                        crashedStrings.add(string);
-//                    } finally {
-//                        if (rawData != null){
-//                            rawDataList.add(rawData);
-//                        }
-//                    }
-//                }
+                CsvReader csvReader = new CsvReader("Company;Address;Person;Sku;Quantity", ";");
+                CsvRows rows = csvReader.openFile(file).getRows();
+                rows.foreach(row -> {
+                    RawData rawData = null;
+                    try {
+                        rawData = RawData.builder()
+                                .companyName(row.get("Company"))
+                                .aUuid(Objects.hash(row.get("Company"), row.get("Address")))
+                                .rAddress(row.get("Address"))
+                                .eUuid(Objects.hash(row.get("Company"), row.get("Person")))
+                                .rEmployee(row.get("Person"))
+                                .sUuid(Objects.hash(row.get("Person"), row.get("Sku")))
+                                .rSale(row.get("Sku"))
+                                .quantity(Double.parseDouble(row.get("Quantity")))
+                                .build();
+                    }catch (Exception e){
+                        crashedStrings.add(row.toString());
+                    } finally {
+                        if (rawData != null){
+                            rawDataList.add(rawData);
+                        }
+                    }
+                });
             } catch (Exception e) {
                 e.printStackTrace();
             }

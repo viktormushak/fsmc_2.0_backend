@@ -7,7 +7,7 @@ create table raw_data (
     r_employee   varchar(200) not null,
     s_uuid       int not null,
     r_sale       varchar(200) not null,
-    quantaty     double
+    quantity     double
 );
 
 create table address (

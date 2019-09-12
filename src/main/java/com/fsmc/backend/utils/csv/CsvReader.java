@@ -30,6 +30,14 @@ public class CsvReader {
         String[] fileColumns = fileSchema.split(delimiter);
 
         for (int i = 0; i < schemaColumns.length; i++) {
+
+            // TODO Fix bag with char '\uFEFF'
+            String fileCol = fileColumns[i];
+            if (fileCol.startsWith(String.valueOf('\uFEFF'))){
+                fileColumns[i] = fileCol.substring(1);
+            }
+            //
+
             if (!schemaColumns[i].equals(fileColumns[i])){
                 throw new Exception("Bad CSV file. Can not valid file schema!");
             }
@@ -41,5 +49,9 @@ public class CsvReader {
         }
 
         return this;
+    }
+
+    public CsvRows getRows() {
+        return csvRows;
     }
 }

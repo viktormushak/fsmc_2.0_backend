@@ -25,7 +25,7 @@ public class RawDataRepositoryImpl implements RawDataRepository {
     public int save(List<RawData> rawDataList) {
 
         String sql = "INSERT INTO raw_data (" +
-                "company_name, a_uuid, r_address, e_uuid, r_employee, s_uuid, r_sale, quantaty) " +
+                "company_name, a_uuid, r_address, e_uuid, r_employee, s_uuid, r_sale, quantity) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class CsvRowsImpl implements CsvRows {
 
@@ -19,12 +20,21 @@ public class CsvRowsImpl implements CsvRows {
         this.values = new ArrayList<>();
     }
 
-    public void put(String[] strings){
+    public void put(String[] strings) {
         Map<String, String> map = new HashMap<>();
         String[] schemaColumns = schema.split(delimiter);
         for (int i = 0; i < schemaColumns.length; i++) {
-            map.put(schemaColumns[i], strings[i]);
+            try {
+                map.put(schemaColumns[i], strings[i]);
+            } catch (ArrayIndexOutOfBoundsException e){
+                map.put(schemaColumns[i], null);
+            }
         }
         values.add(map);
+    }
+
+    @Override
+    public void foreach(Consumer<Map<String, String>> consumer) {
+        values.forEach(consumer);
     }
 }

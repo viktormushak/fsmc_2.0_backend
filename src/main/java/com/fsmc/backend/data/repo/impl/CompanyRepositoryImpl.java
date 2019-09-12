@@ -26,9 +26,14 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     @Override
     public List<Company> getAll() {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
+//        return jdbcTemplate.query("SELECT company_name as name, " +
+//                        "COUNT(DISTINCT company_name, city, street, building) as addresses, " +
+//                        "COUNT(DISTINCT employ_id) as employees FROM address group by company_name",
+//                parameterSource, new CompanyMapper());
+
         return jdbcTemplate.query("SELECT company_name as name, " +
-                        "COUNT(DISTINCT company_name, city, street, building) as addresses, " +
-                        "COUNT(DISTINCT employ_id) as employees FROM address group by company_name",
+                        "COUNT(DISTINCT a_uuid) as addresses, " +
+                        "COUNT(DISTINCT e_uuid) as employees FROM raw_data group by company_name",
                 parameterSource, new CompanyMapper());
     }
 

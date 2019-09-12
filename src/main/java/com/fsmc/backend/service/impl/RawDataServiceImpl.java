@@ -1,10 +1,13 @@
 package com.fsmc.backend.service.impl;
 
 import com.fsmc.backend.data.model.RawData;
+import com.fsmc.backend.data.network.RawDataReport;
 import com.fsmc.backend.data.repo.RawDataRepository;
+import com.fsmc.backend.service.FileService;
 import com.fsmc.backend.service.RawDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.util.*;
@@ -12,47 +15,59 @@ import java.util.*;
 @Service
 public class RawDataServiceImpl implements RawDataService {
 
+    private final FileService fileService;
     private final RawDataRepository rawDataRepository;
+    private List<RawData> rawDataList;
+    private List<String> crashedStrings;
+    private int successStrings;
 
     @Autowired
-    public RawDataServiceImpl(RawDataRepository rawDataRepository) {
+    public RawDataServiceImpl(FileService fileService, RawDataRepository rawDataRepository) {
+        this.fileService = fileService;
         this.rawDataRepository = rawDataRepository;
+        this.rawDataList = new ArrayList<>();
+        this.crashedStrings = new ArrayList<>();
     }
 
     @Override
-    public void execute() throws IOException {
-        File csvFile = new File("gamma_utf.csv");
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(csvFile));
-        String string;
-        List<RawData> rawDataList = new ArrayList<>();
-        while ((string = bufferedReader.readLine()) != null) {
+    public RawDataReport execute(String company, MultipartFile multipartFile) {
 
-            String[] strings = string.split(";");
-            String companyName = "Гамма";
-            int aUuid = Objects.hash(companyName, strings[1]);
-            String rAddress = strings[1];
-            int eUuid = Objects.hash(companyName, strings[3]);
-            String rEmployee = strings[3];
-            int sUuid = Objects.hash(rEmployee, strings[2]);
-            String rSale = strings[2];
-            double quantity = 0;
+        Optional<File> uploadedFile = fileService.saveMultipartFile(company, multipartFile);
+
+        uploadedFile.ifPresent(file -> {
             try {
-                quantity = Double.parseDouble(strings[4]);
-            }catch (Exception e){
+                String string;
+                RawData rawData = null;
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                while ((string = bufferedReader.readLine()) != null) {
+                    String[] strings = string.split(";");
+                    try {
+                        rawData = RawData.builder()
+                                .companyName(company)
+                                .aUuid(Objects.hash(company, strings[1]))
+                                .rAddress(strings[1])
+                                .eUuid(Objects.hash(company, strings[3]))
+                                .rEmployee(strings[3])
+                                .sUuid(Objects.hash(strings[3], strings[2]))
+                                .rSale(strings[2])
+                                .quantity(Double.parseDouble(strings[4]))
+                                .build();
+                    }catch (Exception e){
+                        crashedStrings.add(string);
+                    } finally {
+                        if (rawData != null){
+                            rawDataList.add(rawData);
+                        }
+                    }
+                }
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            rawDataList.add(RawData.builder()
-                    .companyName(companyName)
-                    .aUuid(aUuid)
-                    .rAddress(rAddress)
-                    .eUuid(eUuid)
-                    .rEmployee(rEmployee)
-                    .sUuid(sUuid)
-                    .rSale(rSale)
-                    .quantity(quantity)
-                    .build());
-        }
+        });
 
-        rawDataRepository.execute(rawDataList);
+        if (!rawDataList.isEmpty()){
+            successStrings = rawDataRepository.save(rawDataList);
+        }
+        return new RawDataReport(successStrings, crashedStrings);
     }
 }

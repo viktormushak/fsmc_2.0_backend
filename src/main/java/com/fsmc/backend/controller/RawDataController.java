@@ -1,10 +1,10 @@
 package com.fsmc.backend.controller;
 
+import com.fsmc.backend.data.network.RawDataReport;
 import com.fsmc.backend.service.RawDataService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -19,8 +19,9 @@ public class RawDataController {
         this.rawDataService = rawDataService;
     }
 
-    @GetMapping
-    public void saveData() throws IOException {
-        rawDataService.execute();
+    @PostMapping("/load/{company}")
+    public RawDataReport saveData(@PathVariable("company") String company,
+                                  @RequestParam("file") MultipartFile file) throws IOException {
+        return rawDataService.execute(company, file);
     }
 }

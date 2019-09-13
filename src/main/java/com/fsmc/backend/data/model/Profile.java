@@ -9,10 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserProfile {
+public class Profile {
 
-    public static final UserProfile EMPTY = new UserProfile();
+    public static final Profile EMPTY = new Profile();
 
+    private String rawData;
     private String name;
     private String surname;
     private String patronymic;

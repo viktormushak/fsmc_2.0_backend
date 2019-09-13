@@ -1,8 +1,9 @@
 package com.fsmc.backend.controller;
 
-import com.fsmc.backend.data.model.User;
-import com.fsmc.backend.data.model.UserProfile;
-import com.fsmc.backend.service.UsersService;
+import com.fsmc.backend.data.model.Credentials;
+import com.fsmc.backend.data.model.Profile;
+import com.fsmc.backend.service.CredentialsService;
+import com.fsmc.backend.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -11,30 +12,22 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 public class UsersController {
 
-    private final UsersService usersService;
+    private final ProfileService profileService;
+    private final CredentialsService credentialsService;
 
     @Autowired
-    public UsersController(UsersService usersService) {
-        this.usersService = usersService;
+    public UsersController(ProfileService profileService, CredentialsService credentialsService) {
+        this.profileService = profileService;
+        this.credentialsService = credentialsService;
     }
 
-    @PostMapping("/create")
-    public User createUser(@RequestBody User user){
-        return usersService.create(user);
+    @PostMapping("/add/credentials")
+    public Credentials createUserCredentials(@RequestBody Credentials credentials){
+        return credentialsService.saveNewCredentials(credentials);
     }
 
-    @PostMapping("/profile/update")
-    public UserProfile updateProfile(@RequestBody UserProfile userProfile, OAuth2Authentication authentication){
-        return usersService.updateProfile(userProfile, (String) authentication.getPrincipal());
-    }
-
-    @GetMapping("/profile")
-    public UserProfile getPrincipalProfile(OAuth2Authentication authentication){
-        return usersService.getProfileByUuid((String) authentication.getPrincipal());
-    }
-
-    @GetMapping("/profile/id/{uuid}")
-    public UserProfile getProfileByUuid(@PathVariable("uuid") String uuid){
-        return usersService.getProfileByUuid(uuid);
+    @PostMapping("/update/profile")
+    public Profile updateUserProfile(@RequestBody Profile profile, OAuth2Authentication authentication){
+        return profileService.updateProfileByUsername(profile, (String) authentication.getPrincipal());
     }
 }

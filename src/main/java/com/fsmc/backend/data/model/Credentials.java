@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Credentials {
 
-    public static final User EMPTY = new User();
+    public static final Credentials EMPTY = new Credentials();
 
-    private String uuid;
+    private String username;
     private String password;
     private String authority;
     private boolean enabled;

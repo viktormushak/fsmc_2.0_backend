@@ -13,6 +13,7 @@ public class Profile {
 
     public static final Profile EMPTY = new Profile();
 
+    private int uuid;
     private String rawData;
     private String name;
     private String surname;

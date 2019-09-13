@@ -35,4 +35,9 @@ public class UsersController {
     public Profile updateUserAttachment(@RequestParam("rawName") String rawName, OAuth2Authentication authentication){
         return profileService.attachRawData(rawName, (String) authentication.getPrincipal());
     }
+
+    @GetMapping
+    public Profile getUserProfile(OAuth2Authentication authentication){
+        return profileService.getUserProfile((String) authentication.getPrincipal());
+    }
 }

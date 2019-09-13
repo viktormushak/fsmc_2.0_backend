@@ -25,4 +25,9 @@ public class ProfileServiceImpl implements ProfileService {
     public Profile attachRawData(String rawName, String username) {
         return profileRepository.attachRawData(rawName, username) > 0 ? Profile.EMPTY : Profile.EMPTY;
     }
+
+    @Override
+    public Profile getUserProfile(String username) {
+        return profileRepository.getWithRawDataByUsername(username);
+    }
 }

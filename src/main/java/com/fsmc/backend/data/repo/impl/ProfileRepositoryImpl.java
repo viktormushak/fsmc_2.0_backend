@@ -31,4 +31,19 @@ public class ProfileRepositoryImpl implements ProfileRepository {
                 " where username = ?";
         return jdbcTemplate.update(sql, rawName, username);
     }
+
+    @Override
+    public Profile getWithRawDataByUsername(String username) {
+        String sql = "select distinct uuid, user_name, user_surname, user_patronymic, email, phone, r_employee, r_address from user " +
+                "left join raw_data on uuid = e_uuid where username = ?";
+        return jdbcTemplate.queryForObject(sql, new String[]{username}, (rs, rowNum) -> Profile.builder()
+                .uuid(rs.getInt("uuid"))
+                .rawData(rs.getString("r_employee"))
+                .name(rs.getString("user_name"))
+                .surname(rs.getString("user_surname"))
+                .patronymic(rs.getString("user_patronymic"))
+                .email(rs.getString("email"))
+                .phone(rs.getString("phone"))
+                .build());
+    }
 }

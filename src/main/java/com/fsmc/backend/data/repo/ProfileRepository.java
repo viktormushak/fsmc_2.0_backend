@@ -8,4 +8,6 @@ public interface ProfileRepository {
     int updateByUsername(Profile profile, String username);
 
     int attachRawData(String rawName, String username);
+
+    Profile getWithRawDataByUsername(String username);
 }

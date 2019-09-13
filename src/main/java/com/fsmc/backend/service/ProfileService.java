@@ -6,7 +6,7 @@ public interface ProfileService {
 
     Profile updateProfileByUsername(Profile profile, String username);
 
-    Profile attachRawData(String rawName, String username);
+    Profile attachRawData(String rawName, String rawAddress, String username);
 
     Profile getUserProfile(String username);
 }

@@ -16,7 +16,7 @@ create table address (
     region  varchar(50) null,
     city    varchar(50) null,
     street  varchar(50) null,
-    build   varchar(10) null,
+    building   varchar(10) null,
     constraint address_uuid_uindex
     unique (uuid)
 );

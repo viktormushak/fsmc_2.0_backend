@@ -15,9 +15,14 @@ public class Profile {
 
     private int uuid;
     private String rawData;
+    private String rawAddress;
     private String name;
     private String surname;
     private String patronymic;
     private String email;
     private String phone;
+    private String region;
+    private String city;
+    private String street;
+    private String building;
 }

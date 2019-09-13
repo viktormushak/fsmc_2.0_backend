@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface ProfileRepository {
     int updateByUsername(Profile profile, String username);
+
+    int attachRawData(String rawName, String username);
 }

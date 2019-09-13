@@ -23,4 +23,12 @@ public class ProfileRepositoryImpl implements ProfileRepository {
         return jdbcTemplate.update(sql, profile.getName(), profile.getSurname(), profile.getPatronymic(),
                 profile.getEmail(), profile.getPhone(), username);
     }
+
+    @Override
+    public int attachRawData(String rawName, String username) {
+        String sql = "update user left join raw_data on uuid = e_uuid " +
+                "set uuid = (select distinct e_uuid from raw_data where r_employee = ?)" +
+                " where username = ?";
+        return jdbcTemplate.update(sql, rawName, username);
+    }
 }

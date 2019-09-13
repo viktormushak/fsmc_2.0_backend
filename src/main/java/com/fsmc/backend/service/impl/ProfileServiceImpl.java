@@ -20,4 +20,9 @@ public class ProfileServiceImpl implements ProfileService {
     public Profile updateProfileByUsername(Profile profile, String username) {
         return profileRepository.updateByUsername(profile, username) > 0 ? profile : Profile.EMPTY;
     }
+
+    @Override
+    public Profile attachRawData(String rawName, String username) {
+        return profileRepository.attachRawData(rawName, username) > 0 ? Profile.EMPTY : Profile.EMPTY;
+    }
 }

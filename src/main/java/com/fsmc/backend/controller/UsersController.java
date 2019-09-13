@@ -30,4 +30,9 @@ public class UsersController {
     public Profile updateUserProfile(@RequestBody Profile profile, OAuth2Authentication authentication){
         return profileService.updateProfileByUsername(profile, (String) authentication.getPrincipal());
     }
+
+    @PostMapping("/attach")
+    public Profile updateUserAttachment(@RequestParam("rawName") String rawName, OAuth2Authentication authentication){
+        return profileService.attachRawData(rawName, (String) authentication.getPrincipal());
+    }
 }

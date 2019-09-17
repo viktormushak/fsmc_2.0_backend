@@ -13,6 +13,6 @@ create table raw_data (
 create table last_company_update (
     id          int auto_increment  primary key,
     company     varchar(50) null,
-    last_update mediumtext  null
+    last_update bigint  null
 );
 

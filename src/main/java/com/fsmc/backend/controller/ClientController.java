@@ -1,6 +1,7 @@
 package com.fsmc.backend.controller;
 
 import com.fsmc.backend.data.model.Client;
+import com.fsmc.backend.data.model.Sales;
 import com.fsmc.backend.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,5 +25,10 @@ public class ClientController {
     @GetMapping("/{company}")
     public List<Client> getClientsByCompany(@PathVariable("company") String company){
         return clientService.getClientsByCompany(company);
+    }
+
+    @GetMapping("/details/sales/{id}")
+    public List<Sales> getClientSales(@PathVariable("id") int clientId){
+        return clientService.getClientSalesByClientUuid(clientId);
     }
 }

@@ -30,7 +30,8 @@ public class CompanyRepositoryImpl implements CompanyRepository {
                 "SELECT company_name as name, last_update, " +
                         " COUNT(DISTINCT e_uuid) as employees," +
                         " SUM(quantity) as score FROM raw_data" +
-                        " left join (SELECT company, MAX(last_update) FROM last_company_update GROUP BY company) AS last_company_update" +
+                        " left join (SELECT company, MAX(last_update) AS last_update" +
+                        " FROM last_company_update GROUP BY company) AS last_company_update" +
                         " on raw_data.company_name = last_company_update.company" +
                         " group by company",
                 new CompanyMapper());

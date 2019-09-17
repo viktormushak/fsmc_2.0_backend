@@ -27,9 +27,11 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     public List<Company> getAll() {
         MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         return jdbcTemplate.query(
-                "SELECT company_name as name," +
+                "SELECT company_name as name, last_update, " +
                         " COUNT(DISTINCT e_uuid) as employees," +
-                        " SUM(quantity) as score FROM raw_data group by company_name",
+                        " SUM(quantity) as score FROM raw_data" +
+                        " left join last_company_update on raw_data.company_name = last_company_update.company" +
+                        " group by company",
                 parameterSource,
                 new CompanyMapper());
     }
@@ -40,6 +42,7 @@ public class CompanyRepositoryImpl implements CompanyRepository {
         public Company mapRow(ResultSet resultSet, int i) throws SQLException {
             return Company.builder()
                     .name(resultSet.getString("name"))
+                    .lastUpdate(resultSet.getLong("last_update"))
                     .employees(resultSet.getInt("employees"))
                     .score(resultSet.getInt("score"))
                     .build();

@@ -9,4 +9,6 @@ public interface ClientService {
     List<Client> getClientsByCompany(String company);
 
     List<Sales> getClientSalesByClientUuid(int clientId);
+
+    List<String> getClientAddressesByClientUuid(int clientId);
 }

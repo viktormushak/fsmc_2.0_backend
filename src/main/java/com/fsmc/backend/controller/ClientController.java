@@ -31,4 +31,9 @@ public class ClientController {
     public List<Sales> getClientSales(@PathVariable("id") int clientId){
         return clientService.getClientSalesByClientUuid(clientId);
     }
+
+    @GetMapping("/details/addresses/{id}")
+    public List<String> getClientAddresses(@PathVariable("id") int clientId){
+        return clientService.getClientAddressesByClientUuid(clientId);
+    }
 }

@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ClientRepository {
     List<Client> getAllByCompany(String company);
+
+    List<String> getClientAddressesByClientUuid(int clientId);
 }

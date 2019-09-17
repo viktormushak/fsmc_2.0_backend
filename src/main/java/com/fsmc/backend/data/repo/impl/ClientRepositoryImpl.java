@@ -23,9 +23,17 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     public List<Client> getAllByCompany(String company) {
         return jdbcTemplate.query(
-                "SELECT DISTINCT e_uuid, r_employee, company_name, r_address, SUM(quantity) as quantity" +
-                        " from raw_data group by r_employee order by quantity DESC",
+                "SELECT DISTINCT e_uuid, r_employee, company_name, r_address, SUM(quantity) AS quantity" +
+                        " FROM raw_data GROUP BY r_employee ORDER BY quantity DESC",
                 new ClientMapper());
+    }
+
+    @Override
+    public List<String> getClientAddressesByClientUuid(int clientId) {
+        return jdbcTemplate.query(
+                "SELECT DISTINCT r_address FROM raw_data WHERE e_uuid = ?",
+                new String[]{String.valueOf(clientId)},
+                new AddressMapper());
     }
 
     private static class ClientMapper implements RowMapper<Client> {
@@ -39,6 +47,14 @@ public class ClientRepositoryImpl implements ClientRepository {
                     .address(resultSet.getString("r_address"))
                     .score(resultSet.getDouble("quantity"))
                     .build();
+        }
+    }
+
+    private static class AddressMapper implements RowMapper<String> {
+
+        @Override
+        public String mapRow(ResultSet resultSet, int i) throws SQLException {
+            return resultSet.getString("r_address");
         }
     }
 }

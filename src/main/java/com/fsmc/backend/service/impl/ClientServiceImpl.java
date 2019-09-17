@@ -30,4 +30,9 @@ public class ClientServiceImpl implements ClientService {
     public List<Sales> getClientSalesByClientUuid(int clientId) {
         return salesRepository.getAllByClientUuid(clientId);
     }
+
+    @Override
+    public List<String> getClientAddressesByClientUuid(int clientId) {
+        return clientRepository.getClientAddressesByClientUuid(clientId);
+    }
 }

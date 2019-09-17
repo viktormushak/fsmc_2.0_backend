@@ -71,6 +71,9 @@ public class RawDataServiceImpl implements RawDataService {
 
         if (!rawDataList.isEmpty()){
             successStrings = rawDataRepository.save(rawDataList);
+            if (successStrings > 0){
+                rawDataRepository.setCompanyUpdate(company, System.currentTimeMillis());
+            }
         }
         return new RawDataReport(successStrings, crashedStrings);
     }

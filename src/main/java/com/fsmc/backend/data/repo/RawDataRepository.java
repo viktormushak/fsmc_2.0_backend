@@ -7,4 +7,6 @@ import java.util.List;
 public interface RawDataRepository {
 
     int save(List<RawData> rawDataList);
+
+    void setCompanyUpdate(String company, long update);
 }

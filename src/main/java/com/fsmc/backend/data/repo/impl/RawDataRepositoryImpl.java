@@ -47,4 +47,10 @@ public class RawDataRepositoryImpl implements RawDataRepository {
                     }
                 }).length;
     }
+
+    @Override
+    public void setCompanyUpdate(String company, long update) {
+        String sql = "INSERT INTO last_company_update (company, last_update) VALUES (?, ?)";
+        jdbcTemplate.update(sql, company, update);
+    }
 }

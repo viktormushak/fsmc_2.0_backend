@@ -3,6 +3,7 @@ package com.fsmc.backend.data.repo.impl;
 import com.fsmc.backend.data.model.Company;
 import com.fsmc.backend.data.repo.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -15,24 +16,22 @@ import java.util.List;
 @Repository
 public class CompanyRepositoryImpl implements CompanyRepository {
 
-    private final NamedParameterJdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public CompanyRepositoryImpl(NamedParameterJdbcTemplate jdbcTemplate) {
+    public CompanyRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
 
     @Override
     public List<Company> getAll() {
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource();
         return jdbcTemplate.query(
                 "SELECT company_name as name, last_update, " +
                         " COUNT(DISTINCT e_uuid) as employees," +
                         " SUM(quantity) as score FROM raw_data" +
                         " left join last_company_update on raw_data.company_name = last_company_update.company" +
                         " group by company",
-                parameterSource,
                 new CompanyMapper());
     }
 

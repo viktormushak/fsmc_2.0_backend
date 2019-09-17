@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class Company {
 
     private String name;
-    private int addresses;
+    private long lastUpdate;
     private int employees;
+    private double score;
 }

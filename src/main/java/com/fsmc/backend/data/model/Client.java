@@ -1,20 +1,35 @@
 package com.fsmc.backend.data.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Client {
 
-    private int position;
-    private int uuid;
     private String name;
-    private String companyName;
+    private String company;
     private String address;
-    private double score;
+    private double totalScore;
+
+    public Client(String name, String company, String address, double totalScore) {
+        this.name = name;
+        this.company = company;
+        this.address = address;
+        this.totalScore = totalScore;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public double getTotalScore() {
+        return totalScore;
+    }
 }

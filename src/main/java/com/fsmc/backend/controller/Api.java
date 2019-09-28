@@ -1,10 +1,13 @@
 package com.fsmc.backend.controller;
 
+import com.fsmc.backend.data.model.Client;
 import com.fsmc.backend.data.model.Company;
-import com.fsmc.backend.data.repo.CompanyRepository;
+import com.fsmc.backend.service.ClientService;
+import com.fsmc.backend.service.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -13,15 +16,22 @@ import java.util.List;
 @RequestMapping("/api")
 public class Api {
 
-    private final CompanyRepository companyRepository;
+    private final CompanyService companyService;
+    private final ClientService clientService;
 
     @Autowired
-    public Api(CompanyRepository companyRepository) {
-        this.companyRepository = companyRepository;
+    public Api(CompanyService companyService, ClientService clientService) {
+        this.companyService = companyService;
+        this.clientService = clientService;
     }
 
     @GetMapping("/companies")
     public List<Company> getCompanies(){
-        return companyRepository.getAll();
+        return companyService.getAll();
+    }
+
+    @GetMapping("/clients")
+    public List<Client> getClientsByCompany(@RequestParam("company") String company){
+        return clientService.getClientsByCompany(company);
     }
 }

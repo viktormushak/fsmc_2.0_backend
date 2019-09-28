@@ -14,25 +14,14 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
-    private final SalesRepository salesRepository;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, SalesRepository salesRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository) {
         this.clientRepository = clientRepository;
-        this.salesRepository = salesRepository;
     }
 
     public List<Client> getClientsByCompany(String company) {
         return clientRepository.getAllByCompany(company);
     }
 
-    @Override
-    public List<Sales> getClientSalesByClientUuid(int clientId) {
-        return salesRepository.getAllByClientUuid(clientId);
-    }
-
-    @Override
-    public List<String> getClientAddressesByClientUuid(int clientId) {
-        return clientRepository.getClientAddressesByClientUuid(clientId);
-    }
 }

@@ -27,13 +27,7 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     @Override
     public List<Company> getAll() {
         return jdbcTemplate.query(
-                "SELECT company_name as name, last_update, " +
-                        " COUNT(DISTINCT e_uuid) as employees," +
-                        " SUM(quantity) as score FROM raw_data" +
-                        " left join (SELECT company, MAX(last_update) AS last_update" +
-                        " FROM last_company_update GROUP BY company) AS last_company_update" +
-                        " on raw_data.company_name = last_company_update.company" +
-                        " group by company",
+                "SELECT company, last_update FROM companies",
                 new CompanyMapper());
     }
 
@@ -41,12 +35,7 @@ public class CompanyRepositoryImpl implements CompanyRepository {
 
         @Override
         public Company mapRow(ResultSet resultSet, int i) throws SQLException {
-            return Company.builder()
-                    .name(resultSet.getString("name"))
-                    .lastUpdate(resultSet.getLong("last_update"))
-                    .employees(resultSet.getInt("employees"))
-                    .score(resultSet.getInt("score"))
-                    .build();
+            return new Company(resultSet.getString("company"), resultSet.getLong("last_update"));
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.fsmc.backend.controller;
 
 import com.fsmc.backend.data.model.Company;
-import com.fsmc.backend.service.CompanyService;
+import com.fsmc.backend.data.repo.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/companies")
-public class CompanyController {
+@RequestMapping("/api")
+public class Api {
 
-    private final CompanyService companyService;
+    private final CompanyRepository companyRepository;
 
     @Autowired
-    public CompanyController(CompanyService companyService) {
-        this.companyService = companyService;
+    public Api(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
     }
 
-    @GetMapping
-    public List<Company> getAllCompanies(){
-        return companyService.getAllCompanies();
+    @GetMapping("/companies")
+    public List<Company> getCompanies(){
+        return companyRepository.getAll();
     }
 }

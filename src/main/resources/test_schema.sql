@@ -10,7 +10,7 @@ create table raw_data (
     quantity     double
 );
 
-create table last_company_update (
+create table companies (
     id          int auto_increment  primary key,
     company     varchar(50) null,
     last_update bigint  null

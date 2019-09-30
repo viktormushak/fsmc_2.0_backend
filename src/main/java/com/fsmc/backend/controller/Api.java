@@ -1,6 +1,7 @@
 package com.fsmc.backend.controller;
 
 import com.fsmc.backend.data.model.Client;
+import com.fsmc.backend.data.model.ClientDetails;
 import com.fsmc.backend.data.model.Company;
 import com.fsmc.backend.service.ClientService;
 import com.fsmc.backend.service.CompanyService;
@@ -33,5 +34,10 @@ public class Api {
     @GetMapping("/clients")
     public List<Client> getClientsByCompany(@RequestParam("company") String company){
         return clientService.getClientsByCompany(company);
+    }
+
+    @GetMapping("/clients/details")
+    public ClientDetails getClientDetailsById(@RequestParam("id") Integer clientId){
+        return clientService.getClientDetailsById(clientId);
     }
 }

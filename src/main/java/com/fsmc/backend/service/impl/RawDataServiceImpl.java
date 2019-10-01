@@ -7,6 +7,8 @@ import com.fsmc.backend.service.FileService;
 import com.fsmc.backend.service.RawDataService;
 import com.fsmc.backend.utils.csv.CsvReader;
 import com.fsmc.backend.utils.csv.CsvRows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +19,7 @@ import java.util.*;
 @Service
 public class RawDataServiceImpl implements RawDataService {
 
+    private Logger logger = LoggerFactory.getLogger(RawDataService.class);
     private final FileService fileService;
     private final RawDataRepository rawDataRepository;
     private List<RawData> rawDataList;
@@ -50,6 +53,7 @@ public class RawDataServiceImpl implements RawDataService {
                     } finally {
                         if (rawData != null){
                             rawDataList.add(rawData);
+                            logger.info("Added rawData: " + rawData );
                         }
                     }
                 });

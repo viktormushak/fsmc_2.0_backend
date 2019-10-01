@@ -24,9 +24,8 @@ public class RawDataRepositoryImpl implements RawDataRepository {
     @Override
     public int save(List<RawData> rawDataList) {
 
-        String sql = "INSERT INTO raw_data (" +
-                "company_name, a_uuid, r_address, e_uuid, r_employee, s_uuid, r_sale, quantity) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO raw_data (company, address_id, address, person_id, person, sku_id, sku, brand, quantity) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         return jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
                     @Override
@@ -39,7 +38,8 @@ public class RawDataRepositoryImpl implements RawDataRepository {
                         ps.setString(5, rawData.getPerson());
                         ps.setInt(6, rawData.getSkuId());
                         ps.setString(7, rawData.getSku());
-                        ps.setDouble(8, rawData.getQuantity());
+                        ps.setString(8, rawData.getBrand());
+                        ps.setDouble(9, rawData.getQuantity());
                     }
                     @Override
                     public int getBatchSize() {

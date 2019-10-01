@@ -12,12 +12,13 @@ import lombok.NoArgsConstructor;
 public class RawData {
 
     private int id;
-    private String companyName;
-    private int aUuid;
-    private String rAddress;
-    private int eUuid;
-    private String rEmployee;
-    private int sUuid;
-    private String rSale;
+    private String company;
+    private int addressId;
+    private String address;
+    private int personId;
+    private String person;
+    private int skuId;
+    private String sku;
+    private String brand;
     private double quantity;
 }

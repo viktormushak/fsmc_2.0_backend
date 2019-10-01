@@ -32,13 +32,13 @@ public class RawDataRepositoryImpl implements RawDataRepository {
                     @Override
                     public void setValues(PreparedStatement ps, int i) throws SQLException {
                         RawData rawData = rawDataList.get(i);
-                        ps.setString(1, rawData.getCompanyName());
-                        ps.setInt(2, rawData.getAUuid());
-                        ps.setString(3, rawData.getRAddress());
-                        ps.setInt(4, rawData.getEUuid());
-                        ps.setString(5, rawData.getREmployee());
-                        ps.setInt(6, rawData.getSUuid());
-                        ps.setString(7, rawData.getRSale());
+                        ps.setString(1, rawData.getCompany());
+                        ps.setInt(2, rawData.getAddressId());
+                        ps.setString(3, rawData.getAddress());
+                        ps.setInt(4, rawData.getPersonId());
+                        ps.setString(5, rawData.getPerson());
+                        ps.setInt(6, rawData.getSkuId());
+                        ps.setString(7, rawData.getSku());
                         ps.setDouble(8, rawData.getQuantity());
                     }
                     @Override

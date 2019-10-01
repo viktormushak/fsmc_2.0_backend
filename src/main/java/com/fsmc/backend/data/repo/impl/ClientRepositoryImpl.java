@@ -25,7 +25,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     public List<Client> getAllByCompany(String company) {
         return jdbcTemplate.query(
-                "SELECT DISTINCT e_uuid, r_employee, company_name, r_address, SUM(quantity) AS quantity FROM raw_data WHERE company_name=? GROUP BY r_employee ORDER BY quantity DESC",
+                "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? GROUP BY person ORDER BY quantity DESC",
                 new String[]{company},
                 new ClientMapper());
     }
@@ -33,15 +33,15 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public ClientDetails getClientDetailsById(Integer clientId) {
         ClientDetails details = jdbcTemplate.queryForObject(
-                "SELECT DISTINCT r_employee, SUM(quantity) AS quantity FROM raw_data WHERE e_uuid=?",
+                "SELECT DISTINCT person, SUM(quantity) AS quantity FROM raw_data WHERE person_id=?",
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsMapper());
         Objects.requireNonNull(details).setAddresses(jdbcTemplate.query(
-                "SELECT DISTINCT r_address FROM raw_data WHERE e_uuid=?",
+                "SELECT DISTINCT address FROM raw_data WHERE person_id=?",
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsAddressMapper()));
         Objects.requireNonNull(details).setBrands(jdbcTemplate.query(
-                "SELECT DISTINCT r_sale, SUM(quantity) AS quantity FROM raw_data WHERE e_uuid=? GROUP BY r_sale",
+                "SELECT DISTINCT brand, SUM(quantity) AS quantity FROM raw_data WHERE person_id=? GROUP BY brand",
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsBrandMapper()));
         return details;
@@ -52,10 +52,10 @@ public class ClientRepositoryImpl implements ClientRepository {
         @Override
         public Client mapRow(ResultSet resultSet, int i) throws SQLException {
             return Client.builder()
-                    .hashId(resultSet.getInt("e_uuid"))
-                    .name(resultSet.getString("r_employee"))
-                    .company(resultSet.getString("company_name"))
-                    .address(resultSet.getString("r_address"))
+                    .hashId(resultSet.getInt("person_id"))
+                    .name(resultSet.getString("person"))
+                    .company(resultSet.getString("company"))
+                    .address(resultSet.getString("address"))
                     .totalScore(resultSet.getDouble("quantity"))
                     .build();
         }
@@ -66,7 +66,7 @@ public class ClientRepositoryImpl implements ClientRepository {
         @Override
         public ClientDetails mapRow(ResultSet resultSet, int i) throws SQLException {
             return ClientDetails.builder()
-                    .name(resultSet.getString("r_employee"))
+                    .name(resultSet.getString("person"))
                     .totalScore(resultSet.getDouble("quantity"))
                     .build();
         }
@@ -76,7 +76,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         @Override
         public ClientDetails.Address mapRow(ResultSet resultSet, int i) throws SQLException {
-            return ClientDetails.Address.builder().address(resultSet.getString("r_address")).build();
+            return ClientDetails.Address.builder().address(resultSet.getString("address")).build();
         }
     }
 
@@ -84,7 +84,7 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         @Override
         public ClientDetails.Brand mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new ClientDetails.Brand(resultSet.getString("r_sale"), resultSet.getDouble("quantity"));
+            return new ClientDetails.Brand(resultSet.getString("brand"), resultSet.getDouble("quantity"));
         }
     }
 }

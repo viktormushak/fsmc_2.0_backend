@@ -12,10 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class RawDataServiceImpl implements RawDataService {
@@ -43,19 +40,11 @@ public class RawDataServiceImpl implements RawDataService {
             try {
                 CsvReader csvReader = new CsvReader("Company;Address;Person;Sku;Quantity", ";");
                 CsvRows rows = csvReader.openFile(file).getRows();
+                CompanyRawDataAdapter companyRawDataAdapter = getCompanyAdapter(company);
                 rows.foreach(row -> {
                     RawData rawData = null;
                     try {
-                        rawData = RawData.builder()
-                                .companyName(row.get("Company"))
-                                .aUuid(Objects.hash(row.get("Company"), row.get("Address")))
-                                .rAddress(row.get("Address"))
-                                .eUuid(Objects.hash(row.get("Company"), row.get("Person")))
-                                .rEmployee(row.get("Person"))
-                                .sUuid(Objects.hash(row.get("Person"), row.get("Sku")))
-                                .rSale(row.get("Sku"))
-                                .quantity(Double.parseDouble(row.get("Quantity")))
-                                .build();
+                        rawData = companyRawDataAdapter.apply(row);
                     }catch (Exception e){
                         crashedStrings.add(row.toString());
                     } finally {
@@ -76,5 +65,56 @@ public class RawDataServiceImpl implements RawDataService {
             }
         }
         return new RawDataReport(successStrings, crashedStrings);
+    }
+
+    private CompanyRawDataAdapter getCompanyAdapter(String company){
+        if ("Волыньфарм".toLowerCase().equals(company.toLowerCase()) || "Волиньфарм".toLowerCase().equals(company.toLowerCase())){
+            return new VFAdapter();
+        }
+
+        return csvRows -> null;
+    }
+
+    private interface CompanyRawDataAdapter {
+        RawData apply(Map<String, String> row);
+    }
+
+    private class VFAdapter implements CompanyRawDataAdapter {
+
+        private static final String COMPANY_NAME = "Волиньфарм";
+
+        @Override
+        public RawData apply(Map<String, String> row) {
+            String address = row.get("Address");
+            String person = row.get("Person");
+            String sku = row.get("Sku");
+            String brand = getBrandBySku(sku);
+            double quantity = Double.parseDouble(row.get("Quantity")) * getIndexBySku(sku);
+            return RawData.builder()
+                    .company(COMPANY_NAME)
+                    .addressId(Objects.hash(COMPANY_NAME, address))
+                    .address(address)
+                    .personId(Objects.hash(COMPANY_NAME, person))
+                    .person(person)
+                    .skuId(Objects.hash(person, sku))
+                    .sku(sku)
+                    .brand(brand)
+                    .quantity(quantity)
+                    .build();
+        }
+
+        private String getBrandBySku(String sku) {
+            if ("Ринт наз спрей  з ментолом 0,5мг/г 10г Фармак".equals(sku)){
+                return "Ринт";
+            } else if ("Ринт наз спрей зволожуючий 0,5мг/г 10г Фармак".equals(sku)){
+                return "Ринт";
+            } else {
+                return null;
+            }
+        }
+
+        private double getIndexBySku(String sku) {
+            return 1;
+        }
     }
 }

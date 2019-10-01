@@ -1,12 +1,13 @@
 create table raw_data (
     id           int auto_increment primary key,
-    company_name varchar(50) not null,
-    a_uuid       int not null,
-    r_address    varchar(200) not null,
-    e_uuid       int not null,
-    r_employee   varchar(200) not null,
-    s_uuid       int not null,
-    r_sale       varchar(200) not null,
+    company varchar(50) not null,
+    address_id       int not null,
+    address    varchar(200) not null,
+    person_id       int not null,
+    person   varchar(200) not null,
+    sku_id       int not null,
+    sku       varchar(200) not null,
+    brand       varchar(200),
     quantity     double
 );
 

@@ -5,6 +5,7 @@ import com.fsmc.backend.data.network.RawDataReport;
 import com.fsmc.backend.data.repo.RawDataRepository;
 import com.fsmc.backend.service.FileService;
 import com.fsmc.backend.service.RawDataService;
+import com.fsmc.backend.service.impl.adapters.*;
 import com.fsmc.backend.utils.csv.CsvReader;
 import com.fsmc.backend.utils.csv.CsvRows;
 import org.slf4j.Logger;
@@ -74,51 +75,15 @@ public class RawDataServiceImpl implements RawDataService {
     private CompanyRawDataAdapter getCompanyAdapter(String company){
         if ("Волыньфарм".toLowerCase().equals(company.toLowerCase()) || "Волиньфарм".toLowerCase().equals(company.toLowerCase())){
             return new VFAdapter();
+        } else if ("УФХ".toLowerCase().equals(company)){
+            return new UFHAdapter();
+        } else if ("Фарм-Холдинг".toLowerCase().equals(company)){
+            return new PharmHoldingAdapter();
+        } else if ("Лекфарм".toLowerCase().equals(company)){
+            return new LekfarmDataAdapter();
         }
 
         return csvRows -> null;
     }
 
-    private interface CompanyRawDataAdapter {
-        RawData apply(Map<String, String> row);
-    }
-
-    private class VFAdapter implements CompanyRawDataAdapter {
-
-        private static final String COMPANY_NAME = "Волиньфарм";
-
-        @Override
-        public RawData apply(Map<String, String> row) {
-            String address = row.get("Address");
-            String person = row.get("Person");
-            String sku = row.get("Sku");
-            String brand = getBrandBySku(sku);
-            double quantity = Double.parseDouble(row.get("Quantity")) * getIndexBySku(sku);
-            return RawData.builder()
-                    .company(COMPANY_NAME)
-                    .addressId(Objects.hash(COMPANY_NAME, address))
-                    .address(address)
-                    .personId(Objects.hash(COMPANY_NAME, person))
-                    .person(person)
-                    .skuId(Objects.hash(person, sku))
-                    .sku(sku)
-                    .brand(brand)
-                    .quantity(quantity)
-                    .build();
-        }
-
-        private String getBrandBySku(String sku) {
-            if ("Ринт наз спрей  з ментолом 0,5мг/г 10г Фармак".equals(sku)){
-                return "Ринт";
-            } else if ("Ринт наз спрей зволожуючий 0,5мг/г 10г Фармак".equals(sku)){
-                return "Ринт";
-            } else {
-                return null;
-            }
-        }
-
-        private double getIndexBySku(String sku) {
-            return 1;
-        }
-    }
 }

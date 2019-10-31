@@ -23,6 +23,14 @@ public class ClientRepositoryImpl implements ClientRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    @Override
+    public List<Client> getAll() {
+        return jdbcTemplate.query(
+                "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data GROUP BY person ORDER BY quantity DESC",
+                new String[]{},
+                new ClientMapper());
+    }
+
     public List<Client> getAllByCompany(String company) {
         return jdbcTemplate.query(
                 "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? GROUP BY person ORDER BY quantity DESC",

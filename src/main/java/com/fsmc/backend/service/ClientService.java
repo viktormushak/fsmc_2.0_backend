@@ -6,6 +6,7 @@ import com.fsmc.backend.data.model.ClientDetails;
 import java.util.List;
 
 public interface ClientService {
+    List<Client> getClientsByCompany();
     List<Client> getClientsByCompany(String company);
     ClientDetails getClientDetailsById(Integer clientId);
 }

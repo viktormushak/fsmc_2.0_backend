@@ -6,6 +6,7 @@ import com.fsmc.backend.data.model.ClientDetails;
 import java.util.List;
 
 public interface ClientRepository {
+    List<Client> getAll();
     List<Client> getAllByCompany(String company);
     ClientDetails getClientDetailsById(Integer clientId);
 }

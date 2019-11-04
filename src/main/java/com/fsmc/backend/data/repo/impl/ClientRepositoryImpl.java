@@ -26,14 +26,14 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public List<Client> getAll() {
         return jdbcTemplate.query(
-                "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data GROUP BY person ORDER BY quantity DESC",
+                "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE brand <> '' GROUP BY person ORDER BY quantity DESC",
                 new String[]{},
                 new ClientMapper());
     }
 
     public List<Client> getAllByCompany(String company) {
         return jdbcTemplate.query(
-                "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? GROUP BY person ORDER BY quantity DESC",
+                "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? AND brand <> '' GROUP BY person ORDER BY quantity DESC",
                 new String[]{company},
                 new ClientMapper());
     }
@@ -41,7 +41,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public ClientDetails getClientDetailsById(Integer clientId) {
         ClientDetails details = jdbcTemplate.queryForObject(
-                "SELECT DISTINCT person, SUM(quantity) AS quantity FROM raw_data WHERE person_id=?",
+                "SELECT DISTINCT person, SUM(quantity) AS quantity FROM raw_data WHERE person_id=? AND brand <> ''",
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsMapper());
         Objects.requireNonNull(details).setAddresses(jdbcTemplate.query(
@@ -49,7 +49,7 @@ public class ClientRepositoryImpl implements ClientRepository {
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsAddressMapper()));
         Objects.requireNonNull(details).setBrands(jdbcTemplate.query(
-                "SELECT DISTINCT brand, SUM(quantity) AS quantity FROM raw_data WHERE person_id=? GROUP BY brand",
+                "SELECT DISTINCT brand, SUM(quantity) AS quantity FROM raw_data WHERE person_id=? AND brand <> '' GROUP BY brand",
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsBrandMapper()));
         return details;

@@ -75,6 +75,8 @@ public class RawDataServiceImpl implements RawDataService {
     private CompanyRawDataAdapter getCompanyAdapter(String company){
         if ("Волыньфарм".toLowerCase().equals(company.toLowerCase()) || "Волиньфарм".toLowerCase().equals(company.toLowerCase())){
             return new VFAdapter();
+        } else if ("Гамма".toLowerCase().equals(company.toLowerCase())){
+            return new GammaDataAdapter();
         } else if ("УФХ".toLowerCase().equals(company)){
             return new UFHAdapter();
         } else if ("Фарм-Холдинг".toLowerCase().equals(company)){

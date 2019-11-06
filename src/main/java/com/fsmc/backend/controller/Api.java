@@ -1,6 +1,7 @@
 package com.fsmc.backend.controller;
 
 import com.fsmc.backend.data.model.Client;
+import com.fsmc.backend.data.model.ClientData;
 import com.fsmc.backend.data.model.ClientDetails;
 import com.fsmc.backend.data.model.Company;
 import com.fsmc.backend.data.network.RawDataReport;
@@ -47,6 +48,16 @@ public class Api {
     @GetMapping("/clients/details")
     public ClientDetails getClientDetailsById(@RequestParam("id") Integer clientId){
         return clientService.getClientDetailsById(clientId);
+    }
+
+    @PostMapping("/clients/data")
+    public boolean saveClientData(@RequestBody ClientData data){
+        return clientService.saveClientData(data);
+    }
+
+    @GetMapping("/clients/data")
+    public ClientData getClientDataById(@RequestParam("id") Integer clientId){
+        return clientService.getClientDataById(clientId);
     }
 
     @PostMapping("/raw")

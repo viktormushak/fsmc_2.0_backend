@@ -1,7 +1,9 @@
 package com.fsmc.backend.service.impl;
 
 import com.fsmc.backend.data.model.Client;
+import com.fsmc.backend.data.model.ClientData;
 import com.fsmc.backend.data.model.ClientDetails;
+import com.fsmc.backend.data.repo.ClientDataRepository;
 import com.fsmc.backend.data.repo.ClientRepository;
 import com.fsmc.backend.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,12 @@ import java.util.List;
 public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
+    private final ClientDataRepository clientDataRepository;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository, ClientDataRepository clientDataRepository) {
         this.clientRepository = clientRepository;
+        this.clientDataRepository = clientDataRepository;
     }
 
     @Override
@@ -31,6 +35,16 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDetails getClientDetailsById(Integer clientId) {
         return clientRepository.getClientDetailsById(clientId);
+    }
+
+    @Override
+    public ClientData getClientDataById(Integer clientId) {
+        return clientDataRepository.getById(clientId);
+    }
+
+    @Override
+    public boolean saveClientData(ClientData data) {
+        return clientDataRepository.save(data);
     }
 
 }

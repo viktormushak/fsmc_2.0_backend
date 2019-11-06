@@ -26,7 +26,6 @@ public class ClientDataRepositoryImpl implements ClientDataRepository {
                 .patronymic(resultSet.getString("patronymic"))
                 .phone(resultSet.getString("phone"))
                 .email(resultSet.getString("email"))
-                .hasEmail(!"none".equals(resultSet.getString("email")))
                 .build());
     }
 
@@ -40,7 +39,7 @@ public class ClientDataRepositoryImpl implements ClientDataRepository {
                     data.getSurname(),
                     data.getPatronymic(),
                     data.getPhone(),
-                    data.isHasEmail() ? data.getEmail() : "none");
+                    data.getEmail());
         }catch (Exception e){
             String query = "UPDATE clients_data SET name = ?, surname = ?, patronymic = ?, phone = ?, email = ? WHERE hash_id = ?";
             jdbcTemplate.update(query,
@@ -48,7 +47,7 @@ public class ClientDataRepositoryImpl implements ClientDataRepository {
                     data.getSurname(),
                     data.getPatronymic(),
                     data.getPhone(),
-                    data.isHasEmail() ? data.getEmail() : "none",
+                    data.getEmail(),
                     data.getHashId());
         }
         return new ClientData.Result(data.equals(getById(data.getHashId())));

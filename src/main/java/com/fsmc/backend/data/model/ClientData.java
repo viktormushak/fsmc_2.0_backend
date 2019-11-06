@@ -17,7 +17,6 @@ public class ClientData {
     private String patronymic;
     private String phone;
     private String email;
-    private boolean hasEmail;
 
     public static class Result {
         private boolean success;

@@ -17,3 +17,15 @@ create table companies (
     last_update bigint  null
 );
 
+create table clients_data(
+    id int auto_increment primary key,
+    hash_id    int          null,
+    name       varchar(100) null,
+    surname    varchar(100) null,
+    patronymic varchar(100) null,
+    phone      varchar(20)  null,
+    email      varchar(100) null,
+    constraint clients_data_has_id_uindex
+        unique (hash_id)
+);
+

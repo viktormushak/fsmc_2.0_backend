@@ -26,14 +26,14 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public List<Client> getAll() {
         return jdbcTemplate.query(
-                "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE brand <> '' GROUP BY person ORDER BY quantity DESC",
+                "SELECT * FROM (SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE brand <> '' GROUP BY person ORDER BY quantity DESC) as t LEFT JOIN clients_data ON t.person_id = clients_data.hash_id",
                 new String[]{},
                 new ClientMapper());
     }
 
     public List<Client> getAllByCompany(String company) {
         return jdbcTemplate.query(
-                "SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? AND brand <> '' GROUP BY person ORDER BY quantity DESC",
+                "SELECT * FROM (SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? AND brand <> '' GROUP BY person ORDER BY quantity DESC) as t LEFT JOIN clients_data ON t.person_id = clients_data.hash_id",
                 new String[]{company},
                 new ClientMapper());
     }
@@ -41,7 +41,7 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public ClientDetails getClientDetailsById(Integer clientId) {
         ClientDetails details = jdbcTemplate.queryForObject(
-                "SELECT DISTINCT person, SUM(quantity) AS quantity FROM raw_data WHERE person_id=? AND brand <> ''",
+                "SELECT * FROM (SELECT DISTINCT person_id, person, SUM(quantity) AS quantity FROM raw_data WHERE person_id=? AND brand <> '') as t LEFT JOIN clients_data ON t.person_id = clients_data.hash_id",
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsMapper());
         Objects.requireNonNull(details).setAddresses(jdbcTemplate.query(
@@ -57,11 +57,24 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     private static class ClientMapper implements RowMapper<Client> {
 
+        private String getName(String surname, String name, String patronymic, String person){
+            if (surname == null || name == null || surname.isEmpty() || name.isEmpty()){
+                return person;
+            } else {
+                return surname + " " + name + (patronymic == null ? "" : " " + patronymic);
+            }
+
+        }
+
         @Override
         public Client mapRow(ResultSet resultSet, int i) throws SQLException {
             return Client.builder()
                     .hashId(resultSet.getInt("person_id"))
-                    .name(resultSet.getString("person"))
+                    .name(getName(
+                            resultSet.getString("surname"),
+                            resultSet.getString("name"),
+                            resultSet.getString("patronymic"),
+                            resultSet.getString("person")))
                     .company(resultSet.getString("company"))
                     .address(resultSet.getString("address"))
                     .totalScore(resultSet.getDouble("quantity"))
@@ -70,11 +83,23 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     private static class ClientDetailsMapper implements RowMapper<ClientDetails> {
+        private String getName(String surname, String name, String patronymic, String person){
+            if (surname == null || name == null || surname.isEmpty() || name.isEmpty()){
+                return person;
+            } else {
+                return surname + " " + name + (patronymic == null ? "" : " " + patronymic);
+            }
+
+        }
 
         @Override
         public ClientDetails mapRow(ResultSet resultSet, int i) throws SQLException {
             return ClientDetails.builder()
-                    .name(resultSet.getString("person"))
+                    .name(getName(
+                            resultSet.getString("surname"),
+                            resultSet.getString("name"),
+                            resultSet.getString("patronymic"),
+                            resultSet.getString("person")))
                     .totalScore(resultSet.getDouble("quantity"))
                     .build();
         }

@@ -26,7 +26,7 @@ public class ClientDataRepositoryImpl implements ClientDataRepository {
                 .patronymic(resultSet.getString("patronymic"))
                 .phone(resultSet.getString("phone"))
                 .email(resultSet.getString("email"))
-                .hasEmail(!resultSet.getString("email").equals("none"))
+                .hasEmail(!"none".equals(resultSet.getString("email")))
                 .build());
     }
 

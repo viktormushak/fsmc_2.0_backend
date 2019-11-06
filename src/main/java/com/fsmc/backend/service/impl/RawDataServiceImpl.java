@@ -37,9 +37,8 @@ public class RawDataServiceImpl implements RawDataService {
 
     @Override
     public RawDataReport execute(String company, MultipartFile multipartFile) {
-
+        final String[] exceptionMessage = new String[1];
         Optional<File> uploadedFile = fileService.saveMultipartFile(company, multipartFile);
-
         uploadedFile.ifPresent(file -> {
             try {
                 CsvReader csvReader = new CsvReader("Company;Address;Person;Sku;Quantity", ";");
@@ -58,34 +57,38 @@ public class RawDataServiceImpl implements RawDataService {
                         }
                     }
                 });
+                if (!rawDataList.isEmpty()){
+                    successStrings = rawDataRepository.save(rawDataList);
+                    if (successStrings > 0){
+                        rawDataRepository.setCompanyUpdate(
+                                ((AbsCompanyRawDataAdapter) companyRawDataAdapter).getCompanyName(),
+                                System.currentTimeMillis());
+                    }
+                }
             } catch (Exception e) {
-                e.printStackTrace();
+                exceptionMessage[0] = e.getMessage();
             }
         });
 
-        if (!rawDataList.isEmpty()){
-            successStrings = rawDataRepository.save(rawDataList);
-            if (successStrings > 0){
-                rawDataRepository.setCompanyUpdate(company, System.currentTimeMillis());
-            }
-        }
-        return new RawDataReport(successStrings, crashedStrings);
+        return new RawDataReport(successStrings, crashedStrings, exceptionMessage[0]);
     }
 
-    private CompanyRawDataAdapter getCompanyAdapter(String company){
-        if ("Волыньфарм".toLowerCase().equals(company.toLowerCase()) || "Волиньфарм".toLowerCase().equals(company.toLowerCase())){
+    private CompanyRawDataAdapter getCompanyAdapter(String company) throws Exception {
+        if ("Волыньфарм".toLowerCase().equals(company.toLowerCase())){
             return new VFAdapter();
         } else if ("Гамма".toLowerCase().equals(company.toLowerCase())){
             return new GammaDataAdapter();
+        } else if ("Здравица".toLowerCase().equals(company.toLowerCase())){
+            return new ZdravitsaDataAdapter();
         } else if ("УФХ".toLowerCase().equals(company)){
             return new UFHAdapter();
         } else if ("Фарм-Холдинг".toLowerCase().equals(company)){
             return new PharmHoldingAdapter();
         } else if ("Лекфарм".toLowerCase().equals(company)){
             return new LekfarmDataAdapter();
+        } else {
+            throw new Exception("Wrong company name: " + company);
         }
-
-        return csvRows -> null;
     }
 
 }

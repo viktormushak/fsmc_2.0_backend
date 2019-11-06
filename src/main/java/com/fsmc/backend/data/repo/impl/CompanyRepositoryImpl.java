@@ -22,8 +22,7 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     public CompanyRepositoryImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
-
+    
     @Override
     public List<Company> getAll() {
         return jdbcTemplate.query(
@@ -32,7 +31,6 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     }
 
     private static class CompanyMapper implements RowMapper<Company> {
-
         @Override
         public Company mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Company(resultSet.getString("company"), resultSet.getLong("last_update"));

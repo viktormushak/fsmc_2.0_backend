@@ -7,10 +7,14 @@ import java.util.Objects;
 
 public abstract class AbsCompanyRawDataAdapter implements CompanyRawDataAdapter {
 
-    private static String COMPANY_NAME;
+    private String companyName;
 
-    AbsCompanyRawDataAdapter(String name) {
-        COMPANY_NAME = name;
+    AbsCompanyRawDataAdapter(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getCompanyName() {
+        return companyName;
     }
 
     public RawData apply(Map<String, String> row) {
@@ -20,10 +24,10 @@ public abstract class AbsCompanyRawDataAdapter implements CompanyRawDataAdapter 
         String brand = getBrandBySku(sku);
         double quantity = Double.parseDouble(row.get("Quantity")) * getIndexBySku(sku);
         return RawData.builder()
-                .company(COMPANY_NAME)
-                .addressId(Objects.hash(COMPANY_NAME, address))
+                .company(companyName)
+                .addressId(Objects.hash(companyName, address))
                 .address(address)
-                .personId(Objects.hash(COMPANY_NAME, person))
+                .personId(Objects.hash(companyName, person))
                 .person(person)
                 .skuId(Objects.hash(person, sku))
                 .sku(sku)

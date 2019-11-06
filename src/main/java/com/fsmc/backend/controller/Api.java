@@ -51,7 +51,7 @@ public class Api {
     }
 
     @PostMapping("/clients/data")
-    public boolean saveClientData(@RequestBody ClientData data){
+    public ClientData.Result saveClientData(@RequestBody ClientData data){
         return clientService.saveClientData(data);
     }
 

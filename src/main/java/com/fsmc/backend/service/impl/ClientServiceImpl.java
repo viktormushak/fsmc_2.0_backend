@@ -43,7 +43,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public boolean saveClientData(ClientData data) {
+    public ClientData.Result saveClientData(ClientData data) {
         return clientDataRepository.save(data);
     }
 

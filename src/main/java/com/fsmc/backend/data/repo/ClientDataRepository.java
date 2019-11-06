@@ -4,5 +4,5 @@ import com.fsmc.backend.data.model.ClientData;
 
 public interface ClientDataRepository {
     ClientData getById(int id);
-    boolean save(ClientData data);
+    ClientData.Result save(ClientData data);
 }

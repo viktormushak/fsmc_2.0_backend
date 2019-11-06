@@ -18,4 +18,20 @@ public class ClientData {
     private String phone;
     private String email;
     private boolean hasEmail;
+
+    public static class Result {
+        private boolean success;
+
+        public Result(boolean success) {
+            this.success = success;
+        }
+
+        public boolean isSuccess() {
+            return success;
+        }
+
+        public void setSuccess(boolean success) {
+            this.success = success;
+        }
+    }
 }

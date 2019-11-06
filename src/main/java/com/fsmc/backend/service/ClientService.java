@@ -11,5 +11,5 @@ public interface ClientService {
     List<Client> getClientsByCompany(String company);
     ClientDetails getClientDetailsById(Integer clientId);
     ClientData getClientDataById(Integer clientId);
-    boolean saveClientData(ClientData data);
+    ClientData.Result saveClientData(ClientData data);
 }

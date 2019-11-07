@@ -23,13 +23,8 @@ public class ClientServiceImpl implements ClientService {
         this.clientDataRepository = clientDataRepository;
     }
 
-    @Override
-    public List<Client> getClientsByCompany() {
-        return clientRepository.getAll();
-    }
-
     public List<Client> getClientsByCompany(String company) {
-        return clientRepository.getAllByCompany(company);
+        return company.equals("null") ? clientRepository.getAll() : clientRepository.getAllByCompany(company);
     }
 
     @Override

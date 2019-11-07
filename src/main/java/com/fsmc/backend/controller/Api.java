@@ -40,11 +40,6 @@ public class Api {
         return clientService.getClientsByCompany(company);
     }
 
-    @GetMapping("/clients/global")
-    public List<Client> getClientsByCompany(){
-        return clientService.getClientsByCompany();
-    }
-
     @GetMapping("/clients/details")
     public ClientDetails getClientDetailsById(@RequestParam("id") Integer clientId){
         return clientService.getClientDetailsById(clientId);

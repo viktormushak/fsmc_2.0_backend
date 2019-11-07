@@ -30,7 +30,7 @@ public class ClientDataRepositoryImpl implements ClientDataRepository {
     }
 
     @Override
-    public ClientData.Result save(ClientData data) {
+    public ClientData save(ClientData data) {
         String sql = "INSERT INTO clients_data (hash_id, name, surname, patronymic, phone, email) VALUES (?, ?, ?, ?, ?, ?)";
         try{
             jdbcTemplate.update(sql,
@@ -50,6 +50,6 @@ public class ClientDataRepositoryImpl implements ClientDataRepository {
                     data.getEmail(),
                     data.getHashId());
         }
-        return new ClientData.Result(data.equals(getById(data.getHashId())));
+        return getById(data.getHashId());
     }
 }

@@ -9,13 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client {
+public class Brand {
 
-    private int rate;
-    private int hashId;
     private String name;
-    private String company;
-    private String address;
-    private double totalScore;
+    private double quality;
 
 }

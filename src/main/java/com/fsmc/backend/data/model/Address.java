@@ -9,13 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Client {
+public class Address {
 
-    private int rate;
-    private int hashId;
-    private String name;
-    private String company;
+    private String region;
+    private String city;
     private String address;
-    private double totalScore;
 
 }

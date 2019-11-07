@@ -1,5 +1,7 @@
 package com.fsmc.backend.data.repo.impl;
 
+import com.fsmc.backend.data.model.Address;
+import com.fsmc.backend.data.model.Brand;
 import com.fsmc.backend.data.model.Client;
 import com.fsmc.backend.data.model.ClientDetails;
 import com.fsmc.backend.data.repo.ClientRepository;
@@ -105,19 +107,26 @@ public class ClientRepositoryImpl implements ClientRepository {
         }
     }
 
-    private static class ClientDetailsAddressMapper implements RowMapper<ClientDetails.Address> {
+    private static class ClientDetailsAddressMapper implements RowMapper<Address> {
 
         @Override
-        public ClientDetails.Address mapRow(ResultSet resultSet, int i) throws SQLException {
-            return ClientDetails.Address.builder().address(resultSet.getString("address")).build();
+        public Address mapRow(ResultSet resultSet, int i) throws SQLException {
+            return Address.builder()
+                    .region("")
+                    .city("")
+                    .address(resultSet.getString("address"))
+                    .build();
         }
     }
 
-    private static class ClientDetailsBrandMapper implements RowMapper<ClientDetails.Brand> {
+    private static class ClientDetailsBrandMapper implements RowMapper<Brand> {
 
         @Override
-        public ClientDetails.Brand mapRow(ResultSet resultSet, int i) throws SQLException {
-            return new ClientDetails.Brand(resultSet.getString("brand"), resultSet.getDouble("quantity"));
+        public Brand mapRow(ResultSet resultSet, int i) throws SQLException {
+            return Brand.builder()
+                    .name(resultSet.getString("brand"))
+                    .quality(resultSet.getDouble("quantity"))
+                    .build();
         }
     }
 }

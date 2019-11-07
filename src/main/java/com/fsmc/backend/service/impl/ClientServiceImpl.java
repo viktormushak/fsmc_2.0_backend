@@ -38,7 +38,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientData.Result saveClientData(ClientData data) {
+    public ClientData saveClientData(ClientData data) {
         return clientDataRepository.save(data);
     }
 

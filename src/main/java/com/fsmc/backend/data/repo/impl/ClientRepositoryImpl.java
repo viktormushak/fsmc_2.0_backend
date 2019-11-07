@@ -28,14 +28,18 @@ public class ClientRepositoryImpl implements ClientRepository {
     @Override
     public List<Client> getAll() {
         return jdbcTemplate.query(
-                "SELECT * FROM (SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE brand <> '' GROUP BY person ORDER BY quantity DESC) as t LEFT JOIN clients_data ON t.person_id = clients_data.hash_id",
+                "SELECT * FROM " +
+                        "(SELECT DISTINCT person_id, person, company, address_id, address, SUM(quantity) AS quantity FROM raw_data WHERE brand <> '' GROUP BY person ORDER BY quantity DESC) as t " +
+                        "LEFT JOIN clients_data ON t.person_id = clients_data.hash_id LEFT JOIN clients_address ON address_id = clients_address.hash_id",
                 new String[]{},
                 new ClientMapper());
     }
 
     public List<Client> getAllByCompany(String company) {
         return jdbcTemplate.query(
-                "SELECT * FROM (SELECT DISTINCT person_id, person, company, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? AND brand <> '' GROUP BY person ORDER BY quantity DESC) as t LEFT JOIN clients_data ON t.person_id = clients_data.hash_id",
+                "SELECT * FROM " +
+                        "(SELECT DISTINCT person_id, person, company, address_id, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? AND brand <> '' GROUP BY person ORDER BY quantity DESC) as t " +
+                        "LEFT JOIN clients_data ON t.person_id = clients_data.hash_id LEFT JOIN clients_address ON address_id = clients_address.hash_id",
                 new String[]{company},
                 new ClientMapper());
     }
@@ -47,7 +51,7 @@ public class ClientRepositoryImpl implements ClientRepository {
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsMapper());
         Objects.requireNonNull(details).setAddresses(jdbcTemplate.query(
-                "SELECT DISTINCT address FROM raw_data WHERE person_id=?",
+                "SELECT * FROM (SELECT DISTINCT address_id, address FROM raw_data WHERE person_id=?) as t LEFT JOIN clients_address ON address_id = clients_address.hash_id",
                 new String[]{String.valueOf(clientId)},
                 new ClientDetailsAddressMapper()));
         Objects.requireNonNull(details).setBrands(jdbcTemplate.query(
@@ -68,6 +72,15 @@ public class ClientRepositoryImpl implements ClientRepository {
 
         }
 
+        private String getAddress(String region, String city, String street, String address){
+            if (region == null || city == null || street == null || region.isEmpty() || city.isEmpty() || street.isEmpty()){
+                return address;
+            } else {
+                return region + ", " + city + ", " + street;
+            }
+
+        }
+
         @Override
         public Client mapRow(ResultSet resultSet, int i) throws SQLException {
             return Client.builder()
@@ -78,13 +91,19 @@ public class ClientRepositoryImpl implements ClientRepository {
                             resultSet.getString("patronymic"),
                             resultSet.getString("person")))
                     .company(resultSet.getString("company"))
-                    .address(resultSet.getString("address"))
+                    .address(getAddress(
+                            resultSet.getString("region"),
+                            resultSet.getString("city"),
+                            resultSet.getString("street"),
+                            resultSet.getString("address")
+                    ))
                     .totalScore(resultSet.getDouble("quantity"))
                     .build();
         }
     }
 
     private static class ClientDetailsMapper implements RowMapper<ClientDetails> {
+
         private String getName(String surname, String name, String patronymic, String person){
             if (surname == null || name == null || surname.isEmpty() || name.isEmpty()){
                 return person;
@@ -109,13 +128,30 @@ public class ClientRepositoryImpl implements ClientRepository {
 
     private static class ClientDetailsAddressMapper implements RowMapper<Address> {
 
+        private Address getAddress(String region, String city, String street, String address){
+            if (region == null || city == null || street == null || region.isEmpty() || city.isEmpty() || street.isEmpty()){
+                return Address.builder()
+                        .region("")
+                        .city("")
+                        .address(address)
+                        .build();
+            } else {
+                return Address.builder()
+                        .region(region)
+                        .city(city)
+                        .address(street)
+                        .build();
+            }
+
+        }
+
         @Override
         public Address mapRow(ResultSet resultSet, int i) throws SQLException {
-            return Address.builder()
-                    .region("")
-                    .city("")
-                    .address(resultSet.getString("address"))
-                    .build();
+            return getAddress(
+                    resultSet.getString("region"),
+                    resultSet.getString("city"),
+                    resultSet.getString("street"),
+                    resultSet.getString("address"));
         }
     }
 

@@ -29,3 +29,12 @@ create table clients_data(
         unique (hash_id)
 );
 
+create table clients_address (
+    id      int auto_increment primary key,
+    hash_id int          null,
+    region  varchar(100) null,
+    city    varchar(100) null,
+    street  varchar(100) null,
+    constraint clients_address_has_id_uindex
+        unique (hash_id)
+);

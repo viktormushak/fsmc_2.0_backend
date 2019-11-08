@@ -29,8 +29,8 @@ public class ClientRepositoryImpl implements ClientRepository {
     public List<Client> getAll() {
         return jdbcTemplate.query(
                 "SELECT * FROM " +
-                        "(SELECT DISTINCT person_id, person, company, address_id, address, SUM(quantity) AS quantity FROM raw_data WHERE brand <> '' GROUP BY person ORDER BY quantity DESC) as t " +
-                        "LEFT JOIN clients_data ON t.person_id = clients_data.hash_id LEFT JOIN clients_address ON address_id = clients_address.hash_id",
+                        "(SELECT DISTINCT company, address_id, address, person_id, person, SUM(quantity) AS quantity FROM raw_data WHERE brand <> '' GROUP BY person) as raw_data " +
+                        "LEFT JOIN clients_data ON raw_data.person_id = clients_data.hash_id LEFT JOIN clients_address ON raw_data.address_id = clients_address.hash_id ORDER BY quantity DESC",
                 new String[]{},
                 new ClientMapper());
     }
@@ -38,8 +38,8 @@ public class ClientRepositoryImpl implements ClientRepository {
     public List<Client> getAllByCompany(String company) {
         return jdbcTemplate.query(
                 "SELECT * FROM " +
-                        "(SELECT DISTINCT person_id, person, company, address_id, address, SUM(quantity) AS quantity FROM raw_data WHERE company=? AND brand <> '' GROUP BY person ORDER BY quantity DESC) as t " +
-                        "LEFT JOIN clients_data ON t.person_id = clients_data.hash_id LEFT JOIN clients_address ON address_id = clients_address.hash_id",
+                        "(SELECT DISTINCT company, address_id, address, person_id, person, SUM(quantity) AS quantity FROM raw_data WHERE company = ? AND brand <> '' GROUP BY person) as raw_data " +
+                        "LEFT JOIN clients_data ON raw_data.person_id = clients_data.hash_id LEFT JOIN clients_address ON raw_data.address_id = clients_address.hash_id ORDER BY quantity DESC",
                 new String[]{company},
                 new ClientMapper());
     }

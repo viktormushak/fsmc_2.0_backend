@@ -80,8 +80,10 @@ public class RawDataServiceImpl implements RawDataService {
             return new GammaDataAdapter();
         } else if ("Здравица".toLowerCase().equals(company.toLowerCase())){
             return new ZdravitsaDataAdapter();
-        } else if ("УФХ".toLowerCase().equals(company)){
-            return new UFHAdapter();
+        } else if ("Провизор".toLowerCase().equals(company)){
+            return new ProvizorDataAdapter();
+        } else if ("Астарта".toLowerCase().equals(company)){
+            return new AstartaDataAdapter();
         } else if ("Фарм-Холдинг".toLowerCase().equals(company)){
             return new PharmHoldingAdapter();
         } else if ("Лекфарм".toLowerCase().equals(company)){

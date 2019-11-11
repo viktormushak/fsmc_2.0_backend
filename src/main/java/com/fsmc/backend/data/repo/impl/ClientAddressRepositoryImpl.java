@@ -21,7 +21,7 @@ public class ClientAddressRepositoryImpl implements ClientAddressRepository {
 
     @Override
     public Address getByClientId(int id) {
-        String query = "select * from (select address_id, address from raw_data where person_id=?) as t left join clients_address on t.address_id = clients_address.hash_id";
+        String query = "select * from (select distinct address_id, address from raw_data where person_id=?) as t left join clients_address on t.address_id = clients_address.hash_id";
         return jdbcTemplate.queryForObject(query, new Integer[]{id}, (resultSet, i) -> Address.builder()
                 .region(resultSet.getString("region"))
                 .city(resultSet.getString("city"))

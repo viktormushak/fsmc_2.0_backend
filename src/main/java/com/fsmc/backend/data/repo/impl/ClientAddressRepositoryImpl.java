@@ -36,19 +36,18 @@ public class ClientAddressRepositoryImpl implements ClientAddressRepository {
     @Override
     public Address save(Address address, Integer clientId) {
         try{
-            int hashId = Objects.hash(address.getRegion(), address.getCity(), address.getAddress());
             Integer address_id = jdbcTemplate.queryForObject("select distinct address_id, address from raw_data where person_id=?", new Integer[]{clientId}, (resultSet, i) -> resultSet.getInt("address_id"));
-            if (address_id != null && address_id != 0){
-                throw new Exception("");
+            if (address_id != null && address_id == 0){
+                address_id = Objects.hash(address.getRegion(), address.getCity(), address.getAddress());
+                jdbcTemplate.update("UPDATE raw_data SET address_id = ?, address = ? WHERE person_id = ?",
+                        address_id,
+                        address.getRegion() + ", " + address.getCity() + ", " + address.getAddress(),
+                        clientId);
             }
 
-            jdbcTemplate.update("UPDATE raw_data SET address_id = ?, address = ? WHERE person_id = ?",
-                    hashId,
-                    address.getRegion() + ", " + address.getCity() + ", " + address.getAddress(),
-                    clientId);
             try{
                 jdbcTemplate.update("INSERT INTO clients_address (hash_id, region, city, street) VALUES (?, ?, ?, ?)",
-                        hashId,
+                        address_id,
                         address.getRegion(),
                         address.getCity(),
                         address.getAddress());
@@ -57,7 +56,7 @@ public class ClientAddressRepositoryImpl implements ClientAddressRepository {
                         address.getRegion(),
                         address.getCity(),
                         address.getAddress(),
-                        hashId);
+                        address_id);
             }
         } catch (Exception e) {
             e.printStackTrace();

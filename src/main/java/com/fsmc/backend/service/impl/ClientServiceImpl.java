@@ -1,8 +1,10 @@
 package com.fsmc.backend.service.impl;
 
+import com.fsmc.backend.data.model.Address;
 import com.fsmc.backend.data.model.Client;
 import com.fsmc.backend.data.model.ClientData;
 import com.fsmc.backend.data.model.ClientDetails;
+import com.fsmc.backend.data.repo.ClientAddressRepository;
 import com.fsmc.backend.data.repo.ClientDataRepository;
 import com.fsmc.backend.data.repo.ClientRepository;
 import com.fsmc.backend.service.ClientService;
@@ -16,11 +18,15 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepository clientRepository;
     private final ClientDataRepository clientDataRepository;
+    private final ClientAddressRepository clientAddressRepository;
 
     @Autowired
-    public ClientServiceImpl(ClientRepository clientRepository, ClientDataRepository clientDataRepository) {
+    public ClientServiceImpl(ClientRepository clientRepository,
+                             ClientDataRepository clientDataRepository,
+                             ClientAddressRepository clientAddressRepository) {
         this.clientRepository = clientRepository;
         this.clientDataRepository = clientDataRepository;
+        this.clientAddressRepository = clientAddressRepository;
     }
 
     public List<Client> getClientsByCompany(String company) {
@@ -40,6 +46,16 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientData saveClientData(ClientData data) {
         return clientDataRepository.save(data);
+    }
+
+    @Override
+    public Address getClientAddressById(Integer clientId) {
+        return clientAddressRepository.getByClientId(clientId);
+    }
+
+    @Override
+    public Address saveClientAddress(Address address, Integer clientId) {
+        return clientAddressRepository.save(address, clientId);
     }
 
 }

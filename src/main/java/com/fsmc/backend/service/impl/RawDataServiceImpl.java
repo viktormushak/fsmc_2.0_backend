@@ -67,6 +67,8 @@ public class RawDataServiceImpl implements RawDataService {
                 }
             } catch (Exception e) {
                 exceptionMessage[0] = e.getMessage();
+            } finally {
+                rawDataList = new ArrayList<>();
             }
         });
 
@@ -74,20 +76,12 @@ public class RawDataServiceImpl implements RawDataService {
     }
 
     private CompanyRawDataAdapter getCompanyAdapter(String company) throws Exception {
-        if ("Волыньфарм".toLowerCase().equals(company.toLowerCase())){
-            return new VFAdapter();
-        } else if ("Гамма".toLowerCase().equals(company.toLowerCase())){
-            return new GammaDataAdapter();
-        } else if ("Здравица".toLowerCase().equals(company.toLowerCase())){
+        if ("Здравица".toLowerCase().equals(company.toLowerCase())){
             return new ZdravitsaDataAdapter();
         } else if ("Провизор".toLowerCase().equals(company.toLowerCase())){
             return new ProvizorDataAdapter();
         } else if ("Астарта".toLowerCase().equals(company.toLowerCase())){
             return new AstartaDataAdapter();
-        } else if ("Фарм-Холдинг".toLowerCase().equals(company)){
-            return new PharmHoldingAdapter();
-        } else if ("Лекфарм".toLowerCase().equals(company)){
-            return new LekfarmDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

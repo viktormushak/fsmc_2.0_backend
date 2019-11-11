@@ -1,5 +1,6 @@
 package com.fsmc.backend.service;
 
+import com.fsmc.backend.data.model.Address;
 import com.fsmc.backend.data.model.Client;
 import com.fsmc.backend.data.model.ClientData;
 import com.fsmc.backend.data.model.ClientDetails;
@@ -11,4 +12,6 @@ public interface ClientService {
     ClientDetails getClientDetailsById(Integer clientId);
     ClientData getClientDataById(Integer clientId);
     ClientData saveClientData(ClientData data);
+    Address getClientAddressById(Integer clientId);
+    Address saveClientAddress(Address data, Integer clientId);
 }

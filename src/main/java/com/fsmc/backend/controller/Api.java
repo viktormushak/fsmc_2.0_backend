@@ -1,9 +1,6 @@
 package com.fsmc.backend.controller;
 
-import com.fsmc.backend.data.model.Client;
-import com.fsmc.backend.data.model.ClientData;
-import com.fsmc.backend.data.model.ClientDetails;
-import com.fsmc.backend.data.model.Company;
+import com.fsmc.backend.data.model.*;
 import com.fsmc.backend.data.network.RawDataReport;
 import com.fsmc.backend.service.ClientService;
 import com.fsmc.backend.service.CompanyService;
@@ -53,6 +50,16 @@ public class Api {
     @GetMapping("/clients/data")
     public ClientData getClientDataById(@RequestParam("id") Integer clientId){
         return clientService.getClientDataById(clientId);
+    }
+
+    @PostMapping("/clients/address")
+    public Address saveClientAddress(@RequestBody Address address, @RequestParam("id") Integer clientId){
+        return clientService.saveClientAddress(address, clientId);
+    }
+
+    @GetMapping("/clients/address")
+    public Address getClientAddressById(@RequestParam("id") Integer clientId){
+        return clientService.getClientAddressById(clientId);
     }
 
     @PostMapping("/raw")

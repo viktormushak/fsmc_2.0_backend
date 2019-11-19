@@ -67,11 +67,9 @@ public class RawDataServiceImpl implements RawDataService {
                 }
             } catch (Exception e) {
                 exceptionMessage[0] = e.getMessage();
-            } finally {
-                rawDataList = new ArrayList<>();
             }
         });
-
+        rawDataList = new ArrayList<>();
         return new RawDataReport(successStrings, crashedStrings, exceptionMessage[0]);
     }
 

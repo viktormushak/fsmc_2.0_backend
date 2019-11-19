@@ -14,7 +14,8 @@ create table raw_data (
 create table companies (
     id          int auto_increment  primary key,
     company     varchar(50) null,
-    last_update bigint  null
+    last_update bigint  null,
+    constraint companies_company_uindex unique (company)
 );
 
 create table clients_data(

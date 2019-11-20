@@ -80,6 +80,8 @@ public class RawDataServiceImpl implements RawDataService {
             return new ProvizorDataAdapter();
         } else if ("Астарта".toLowerCase().equals(company.toLowerCase())){
             return new AstartaDataAdapter();
+        } else if ("СВ_Медикал".toLowerCase().equals(company.toLowerCase())){
+            return new SVDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

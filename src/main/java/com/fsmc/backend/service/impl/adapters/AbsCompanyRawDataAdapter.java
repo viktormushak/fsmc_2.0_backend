@@ -22,7 +22,7 @@ public abstract class AbsCompanyRawDataAdapter implements CompanyRawDataAdapter 
         String person = row.get("Person");
         String sku = row.get("Sku");
         String brand = getBrandBySku(sku);
-        double quantity = Double.parseDouble(row.get("Quantity")) * getIndexBySku(sku);
+        double quantity = Double.parseDouble(row.get("Quantity").replace(",", ".")) * getIndexBySku(sku);
         return RawData.builder()
                 .company(companyName)
                 .addressId(Objects.hash(companyName, address))

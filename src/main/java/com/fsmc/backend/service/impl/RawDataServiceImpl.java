@@ -82,6 +82,8 @@ public class RawDataServiceImpl implements RawDataService {
             return new AstartaDataAdapter();
         } else if ("СВ_Медикал".toLowerCase().equals(company.toLowerCase())){
             return new SVDataAdapter();
+        } else if ("Витамин".toLowerCase().equals(company.toLowerCase())){
+            return new VitaminRawDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

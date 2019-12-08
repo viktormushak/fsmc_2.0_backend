@@ -31,12 +31,12 @@ public class RawDataServiceImpl implements RawDataService {
     public RawDataServiceImpl(FileService fileService, RawDataRepository rawDataRepository) {
         this.fileService = fileService;
         this.rawDataRepository = rawDataRepository;
-        this.rawDataList = new ArrayList<>();
-        this.crashedStrings = new ArrayList<>();
     }
 
     @Override
     public RawDataReport execute(String company, MultipartFile multipartFile) {
+        this.rawDataList = new ArrayList<>();
+        this.crashedStrings = new ArrayList<>();
         final String[] exceptionMessage = new String[1];
         Optional<File> uploadedFile = fileService.saveMultipartFile(company, multipartFile);
         uploadedFile.ifPresent(file -> {
@@ -69,7 +69,6 @@ public class RawDataServiceImpl implements RawDataService {
                 exceptionMessage[0] = e.getMessage();
             }
         });
-        rawDataList = new ArrayList<>();
         return new RawDataReport(successStrings, crashedStrings, exceptionMessage[0]);
     }
 
@@ -84,6 +83,12 @@ public class RawDataServiceImpl implements RawDataService {
             return new SVDataAdapter();
         } else if ("Витамин".toLowerCase().equals(company.toLowerCase())){
             return new VitaminRawDataAdapter();
+        } else if ("Аптека_36,6".toLowerCase().equals(company.toLowerCase())){
+            return new Apteka36i6DataAdapter();
+        } else if ("Галафарм".toLowerCase().equals(company.toLowerCase())){
+            return new GalafarmDataAdapter();
+        } else if ("Сириус".toLowerCase().equals(company.toLowerCase())){
+            return new SiriusDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

@@ -91,6 +91,8 @@ public class RawDataServiceImpl implements RawDataService {
             return new SiriusDataAdapter();
         } else if ("Арника".toLowerCase().equals(company.toLowerCase())){
             return new ArnikaDataAdapter();
+        } else if ("Волыньфарм".toLowerCase().equals(company.toLowerCase())){
+            return new VolynfarmDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

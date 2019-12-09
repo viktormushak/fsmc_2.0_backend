@@ -26,7 +26,7 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     @Override
     public List<Company> getAll() {
         return jdbcTemplate.query(
-                "SELECT company, last_update FROM companies",
+                "SELECT company, last_update FROM companies order by company",
                 new CompanyMapper());
     }
 

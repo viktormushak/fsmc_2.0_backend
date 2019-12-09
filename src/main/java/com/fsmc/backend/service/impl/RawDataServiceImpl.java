@@ -89,6 +89,8 @@ public class RawDataServiceImpl implements RawDataService {
             return new GalafarmDataAdapter();
         } else if ("Сириус".toLowerCase().equals(company.toLowerCase())){
             return new SiriusDataAdapter();
+        } else if ("Арника".toLowerCase().equals(company.toLowerCase())){
+            return new ArnikaDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

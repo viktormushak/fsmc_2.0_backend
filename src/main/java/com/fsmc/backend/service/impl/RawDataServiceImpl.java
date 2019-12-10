@@ -93,6 +93,10 @@ public class RawDataServiceImpl implements RawDataService {
             return new ArnikaDataAdapter();
         } else if ("Волыньфарм".toLowerCase().equals(company.toLowerCase())){
             return new VolynfarmDataAdapter();
+        } else if ("Наталка".toLowerCase().equals(company.toLowerCase())){
+            return new NatalkaDataAdapter();
+        } else if ("Виталюкс".toLowerCase().equals(company.toLowerCase())){
+            return new VitaluxDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

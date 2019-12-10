@@ -97,6 +97,8 @@ public class RawDataServiceImpl implements RawDataService {
             return new NatalkaDataAdapter();
         } else if ("Виталюкс".toLowerCase().equals(company.toLowerCase())){
             return new VitaluxDataAdapter();
+        } else if ("Акс".toLowerCase().equals(company.toLowerCase())){
+            return new AksDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

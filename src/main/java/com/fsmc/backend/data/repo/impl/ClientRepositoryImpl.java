@@ -32,7 +32,7 @@ public class ClientRepositoryImpl implements ClientRepository {
                         "(SELECT DISTINCT company, address_id, address, person_id, person, SUM(quantity) AS quantity " +
                         "FROM (select r.company, r.address_id, r.address, r.person_id, r.person, r.brand, r.quantity, c.global from raw_data r left join companies c on r.company = c.company) as t " +
                         "WHERE t.brand <> '' and t.global = true GROUP BY t.person) as raw_data " +
-                        "LEFT JOIN clients_data ON raw_data.person_id = clients_data.hash_id LEFT JOIN clients_address ON raw_data.address_id = clients_address.hash_id ORDER BY quantity DESC",
+                        "LEFT JOIN clients_data ON raw_data.person_id = clients_data.hash_id LEFT JOIN clients_address ON raw_data.address_id = clients_address.hash_id ORDER BY quantity DESC limit 100",
                 new String[]{},
                 new ClientMapper());
     }

@@ -16,6 +16,8 @@ public class NatalkaDataAdapter extends AbsCompanyRawDataAdapter {
             return "Амизон";
         } else if (sku.contains("Амизон таб. 0,25 №20")) {
             return "Амизон";
+        }  else if (sku.contains("Амизончик сироп фл. 100мл")) {
+            return "Амизон";
         } else if (sku.contains("Гропивирин таб.500мг №20")) {
             return "Гропивирин";
         } else if (sku.contains("Гропивирин табл. 500мг №50")) {

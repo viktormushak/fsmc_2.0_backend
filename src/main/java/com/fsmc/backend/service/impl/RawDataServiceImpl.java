@@ -101,6 +101,8 @@ public class RawDataServiceImpl implements RawDataService {
             return new AksDataAdapter();
         } else if ("Первоцвет".toLowerCase().equals(company.toLowerCase())){
             return new PervotsvetDataAdapter();
+        } else if ("Гамма".toLowerCase().equals(company.toLowerCase())){
+            return new GammaDataAdapter();
         } else {
             throw new Exception("Wrong company name: " + company);
         }

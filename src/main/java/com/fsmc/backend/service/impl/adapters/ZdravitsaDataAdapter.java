@@ -7,13 +7,7 @@ public class ZdravitsaDataAdapter extends AbsCompanyRawDataAdapter {
 
     @Override
     protected String getBrandBySku(String sku) {
-        if (sku.contains("АМИЗОН МАКС КАПС 0,5Г №10")) {
-            return "Амизон";
-        } else if (sku.contains("АМИЗОН ТАБ П/О 0,125Г №10")) {
-            return "Амизон";
-        } else if (sku.contains("АМИЗОН ТАБ П/О 0,25Г №10")) {
-            return "Амизон";
-        } else if (sku.contains("АМИЗОН ТАБ П/О 0,25Г №20")) {
+        if (sku.toLowerCase().contains("АМИЗОН".toLowerCase())) {
             return "Амизон";
         } else if (sku.contains("БАД ЛАКТИАЛЕ КАПС 230МГ №30 НДС")) {
             return "Лактиале";
@@ -25,13 +19,7 @@ public class ZdravitsaDataAdapter extends AbsCompanyRawDataAdapter {
             return "Гропивирин";
         } else if (sku.contains("ГРОПИВИРИН таб 500мг №50")) {
             return "Гропивирин";
-        } else if (sku.contains("ЛИЗАК ТАБ Д/СОС СО ВКУСОМ АНИСА И МЯТЫ №10")) {
-            return "Лизак";
-        } else if (sku.contains("ЛИЗАК ТАБ Д/СОС СО ВКУСОМ АПЕЛЬСИНА №10")) {
-            return "Лизак";
-        } else if (sku.contains("ЛИЗАК ТАБ Д/СОС СО ВКУСОМ МАЛИНЫ №10")) {
-            return "Лизак";
-        } else if (sku.contains("ЛИЗАК ТАБ Д/СОС СО ВКУСОМ ШОКОЛАДА №10")) {
+        } else if (sku.toLowerCase().contains("ЛИЗАК".toLowerCase())) {
             return "Лизак";
         } else if (sku.contains("МИЛТ КАП НАЗАЛ 10МЛ")) {
             return "Милт";

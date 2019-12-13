@@ -7,21 +7,7 @@ public class VolynfarmDataAdapter extends AbsCompanyRawDataAdapter {
 
     @Override
     protected String getBrandBySku(String sku) {
-        if (sku.contains("ААмізон (дит) табл 0,125г №10")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон (дит) табл. 0,125г №10")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон Макс капс №10")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон Макс капс. №10 Фармак")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон табл 0,25г №10")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон табл 0,25г №20")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон табл. 0,25 г №10")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон табл. 0,25 г №20")) {
+        if (sku.contains("Амізон")) {
             return "Амизон";
         } else if (sku.contains("Гропівірин табл. 500 мг №50")) {
             return "Гропивирин";

@@ -8,19 +8,17 @@ public class PervotsvetDataAdapter extends AbsCompanyRawDataAdapter {
 
     @Override
     protected String getBrandBySku(String sku) {
-        if (sku.contains("Амизон Макс")) {
-            return "Амизон";
-        } else if (sku.contains("Амизон табл")) {
+        if (sku.toLowerCase().contains("Амизон".toLowerCase())) {
             return "Амизон";
         } else if (sku.contains("Гропивирин таб. 500мг №20")) {
             return "Гропивирин";
         } else if (sku.contains("Гропивирин таб. 500мг №50")) {
             return "Гропивирин";
-        } else if (sku.contains("Лактиале капс")) {
+        } else if (sku.toLowerCase().contains("Лактиале капс".toLowerCase())) {
             return "Лактиале";
-        } else if (sku.contains("Лактиале малыш")) {
+        } else if (sku.toLowerCase().contains("Лактиале малыш".toLowerCase())) {
             return "Лактиале";
-        } else if (sku.contains("Лактиале пак")) {
+        } else if (sku.toLowerCase().contains("Лактиале пак".toLowerCase())) {
             return "Лактиале";
         } else if (sku.contains("Лизак")) {
             return "Лизак";

@@ -8,7 +8,8 @@ create table raw_data (
     sku_id       int not null,
     sku       varchar(200) not null,
     brand       varchar(200),
-    quantity     double
+    quantity     double,
+    month   varchar(5)
 );
 
 create table companies (

@@ -7,26 +7,14 @@ public class VitaluxDataAdapter extends AbsCompanyRawDataAdapter {
 
     @Override
     protected String getBrandBySku(String sku) {
-        if (sku.contains("Амізон Макс табл. 500мг №10")) {
+        if (sku.contains("Амізон")) {
             return "Амизон";
-        } else if (sku.contains("Амізон табл. 125мг №10")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон табл. 250мг №10")) {
-            return "Амизон";
-        } else if (sku.contains("Амізон табл. 250мг №20")) {
-            return "Амизон";
-        } else if (sku.contains("Гропівірін табл. 500 мг №20")) {
-            return "Гропивирин";
-        } else if (sku.contains("Лактіале капс. №30")) {
-            return "Лактиале";
-        } else if (sku.contains("Лактіале Малюк пак.0,5г №14")) {
-            return "Лактиале";
-        } else if (sku.contains("Лактіале пак. №10")) {
+        } else if (sku.contains("Едем")) {
+            return "Эдем";
+        } else if (sku.contains("Лактіале")) {
             return "Лактиале";
         } else if (sku.contains("Лізак")) {
             return "Лизак";
-        } else if (sku.contains("Мілт")) {
-            return "Милт";
         } else if (sku.contains("Назоферон")) {
             return "Назоферон";
         } else if (sku.contains("Пектолван плющ сироп 100мл")) {
